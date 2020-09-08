@@ -106,7 +106,7 @@ ggplot(avgDiffs, aes(x=Drafter, y=RankDiff)) + geom_bar(stat = "identity") + yla
 Since kickers and defenses are generally ranked very low, and because I picked a bad kicker and defense, I was curious to see what these rankings look like without those position types:
 
 ```{r}
-noKorDst <- joinedData[!(joinedData$Pos %in% list("DST", "K")), ]
+noKorDst <- joinedData[!(joinedData$Pos %in% list("D/ST", "K")), ]
 
 avgDiffs2 <- aggregate(RankDiff ~ Drafter, noKorDst, FUN=mean)
 
