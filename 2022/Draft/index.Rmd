@@ -1,5 +1,5 @@
 ---
-title: "4th Floor Fantast Draft 2022"
+title: "4th Floor Fantasy Draft 2022"
 author: "Evan Oman"
 date: "September 2, 2022"
 output:
@@ -23,7 +23,7 @@ The analysis below explores the performance of my friends during our 2022 Fantas
 
 Note that I am using the ESPN Superflex PPR rankings as a proxy for ground truth. Many of the rankings there are debatable but I think overall it gives a good rough estimate of each player's value.
 
-The source and data for this project are available at https://github.com/EvanOman/FantasyFootbal. My contact info is available on my website: http://www.evanoman.com.
+The source and data for this project are available at https://github.com/EvanOman/FantasyFootball. My contact info is available on my website: http://www.evanoman.com.
 
 Let the fun begin!
 
