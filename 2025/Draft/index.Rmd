@@ -64,6 +64,7 @@ This dataset is also tall, so no additional reshaping is necessary. With both ta
 
 ```{r}
 library("dplyr")
+library("DT")
 
 # Join rankings data with draft data
 joinedData <- left_join(draftData, rankings, by="Player")
@@ -173,7 +174,10 @@ Here are the key takeaways:
 ```{r}
 rawTable <- joinedData[order(joinedData$PickNumber), c("PickNumber", "Round", "Drafter", "Player", "Rank", "RankDiff")]
 
-knitr::kable(rawTable,
-             col.names = c("Pick #", "Round", "Team", "Player", "ESPN Rank", "Rank Diff"),
-             align = c("r", "r", "l", "l", "r", "r"))
+datatable(
+  rawTable,
+  colnames = c("Pick #", "Round", "Team", "Player", "ESPN Rank", "Rank Diff"),
+  filter = "top",
+  options = list(pageLength = 25, autoWidth = TRUE)
+)
 ```
