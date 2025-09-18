@@ -1,0 +1,183 @@
+---
+title: "4th Floor Fantasy Draft 2025"
+author: "Evan Oman"
+date: "September 1, 2025"
+output:
+  html_document:
+    toc: true
+---
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(fig.width=12, fig.height=8, fig.path='Figs/',
+                      echo=FALSE, warning=FALSE, message=FALSE)
+options(width=100)
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+This document looks at how our league handled the 2025 Fantasy Football Draft. We have drafted without cheatsheets since 2016, so every manager has to arrive with their own plan. That setup leads to big swings in pick quality, which makes the draft a fun case study each year.
+
+Throughout the analysis I use the ESPN Superflex PPR rankings as a proxy for player value. The list is far from perfect, but it serves as a consistent yardstick for comparing draft decisions.
+
+Source code and data live at https://github.com/EvanOman/FantasyFootball, and you can reach me via http://www.evanoman.com.
+
+Let the fun begin!
+
+## Data Preparation
+
+First we load the draft data. This year I copied the ESPN draft board and reshaped it with a few regular expressions.
+
+Load the data:
+
+```{r}
+draftData <- read.csv("./data/Draft2025.csv", stringsAsFactors = FALSE)
+
+# Align column names with the rest of the workflow
+names(draftData)[names(draftData) == "OverallPick"] <- "PickNumber"
+names(draftData)[names(draftData) == "Position"] <- "Pos"
+names(draftData)[names(draftData) == "FantasyTeam"] <- "Drafter"
+
+print.data.frame(head(draftData), row.names = FALSE)
+```
+
+The file is already in the tall format we need, so we can move straight to the rankings.
+
+For 2025 we use the top 300 ESPN PPR Superflex rankings:
+
+```{r}
+rankings <- read.csv("./data/espn_superflex_ppr_2025.csv", stringsAsFactors = FALSE)
+
+# Keep positional labels from the rankings distinct from the draft data
+names(rankings)[names(rankings) == "Pos"] <- "RankPos"
+
+# Read player as string, not factor
+rankings$Player <- as.character(rankings$Player)
+
+print.data.frame(head(rankings, n=10), row.names=FALSE)
+```
+
+This dataset is also tall, so no additional reshaping is necessary. With both tables ready we join `draftData` and `rankings` on `Player`. Because this is a left join, every draft pick is retained even if the player falls outside the top 300. Any missing ranks are replaced with the worst ranking (`nrow(rankings) + 1`).
+
+```{r}
+library("dplyr")
+library("DT")
+
+# Join rankings data with draft data
+joinedData <- left_join(draftData, rankings, by="Player")
+
+# Some players will not have a  ranking, give these players a worst ranking + 1
+joinedData$Rank[is.na(joinedData$Rank)] <- nrow(rankings) + 1
+
+print.data.frame(head(joinedData, n=10), row.names=FALSE)
+```
+
+The result contains every pick, its pick number, and the ESPN ranking. From here we can measure pick quality using the difference between those two numbers.
+
+```{r}
+joinedData$RankDiff <- joinedData$Rank - joinedData$PickNumber
+
+print.data.frame(head(joinedData, n=10), row.names=FALSE)
+```
+
+With the data prepped we can move on to summarizing the draft.
+
+## Figures and Results
+
+A natural starting point is the average difference between pick number and rank for each drafter. We calculate that with `aggregate`.
+
+```{r}
+avgDiffs <- aggregate(RankDiff ~ Drafter, joinedData, FUN=mean)
+
+# Order factor by worst draft to best
+avgDiffs <- within(avgDiffs, Drafter <- factor(Drafter, levels=avgDiffs[order(avgDiffs$RankDiff), "Drafter"]))
+
+# Order dataframe by worst draft to best
+avgDiffs <- avgDiffs[order(avgDiffs$RankDiff, decreasing = FALSE),]
+
+print.data.frame(avgDiffs, row.names=FALSE)
+```
+
+From this table we learn that `r bd <- avgDiffs[which.min(avgDiffs$RankDiff),]; bd$Drafter` landed the strongest class (his average pick was `r bestDiff <- bd$RankDiff; abs(bestDiff)` slots `r if (bestDiff < 0) "under" else "over"` the ESPN rank) while `r wd <- avgDiffs[which.max(avgDiffs$RankDiff),]; wd$Drafter` struggled the most (averaging `r worstDiff <- wd$RankDiff; abs(worstDiff)` spots `r if (worstDiff < 0) "under" else "over"`). The bar chart below gives the same view at a glance.
+
+```{r}
+library(ggplot2)
+ggplot(avgDiffs, aes(x=Drafter, y=RankDiff)) + geom_bar(stat = "identity") + ylab("Mean Difference Between Pick # and Ranking")
+```
+
+Kickers and defenses drag down averages—especially mine this year—so I also check the results after removing those positions:
+
+```{r}
+noKorDst <- joinedData[!(joinedData$Pos %in% c("DST", "K")), ]
+
+avgDiffs2 <- aggregate(RankDiff ~ Drafter, noKorDst, FUN=mean)
+
+# Order factor by worst draft to best
+avgDiffs2 <- within(avgDiffs2, Drafter <- factor(Drafter, levels=avgDiffs[order(avgDiffs$RankDiff), "Drafter"]))
+
+# Order dataframe by worst draft to best
+avgDiffs2 <- avgDiffs2[order(avgDiffs2$RankDiff, decreasing = FALSE),]
+
+print.data.frame(avgDiffs2, row.names=FALSE)
+```
+Next I look at positional trends to see which spots were over- or undervalued.
+
+```{r}
+posDiffs <- aggregate(RankDiff ~ Pos, joinedData, FUN=mean)
+
+posDiffs <- within(posDiffs, Pos <- factor(Pos, levels=posDiffs[order(posDiffs$RankDiff), "Pos"]))
+
+# Order dataframe by worst draft to best
+posDiffs <- posDiffs[order(posDiffs$RankDiff, decreasing = FALSE),]
+
+print.data.frame(posDiffs, row.names=FALSE)
+
+ggplot(posDiffs, aes(x=Pos, y=RankDiff)) + geom_bar(stat = "identity") + ylab("Mean Difference Between Pick # and Ranking")
+```
+
+The chart shows that `r bpd <- posDiffs[which.min(posDiffs$RankDiff),]; bestDiff <- bpd$RankDiff; bpd$Pos` were `r if (bestDiff < 0) "under" else "over"` valued by `r abs(bestDiff)` picks on average, while `r wpd <- posDiffs[which.max(posDiffs$RankDiff),]; worstDiff <- wpd$RankDiff; wpd$Pos` were `r if (worstDiff < 0) "under" else "over"` valued by `r abs(worstDiff)` picks.
+
+Draft quality definitely decays over time, so the next two plots chart `Pick #` versus `Rank` with a diagonal "break-even" line. Points below the line were bargains; points above were reaches. The first plot highlights drafters and the second highlights positions.
+
+```{r}
+# Scatter colored by drafter
+ggplot(joinedData, aes(x=PickNumber,y=Rank)) + geom_point(aes(color=Drafter)) + geom_abline() + xlab("Pick #")
+```
+
+```{r}
+# Scatter colored by position
+ggplot(joinedData, aes(x=PickNumber,y=Rank)) + geom_point(aes(color=Pos)) + geom_abline() + xlab("Pick #")
+```
+
+Both plots make it clear that the later rounds are a free-for-all.
+
+Finally, I look at the round-by-round swings for each drafter. In the figure below, anything below the dashed line is a win and anything above is a reach.
+
+```{r}
+# Scatter colored by position, faceted by drafter
+ggplot(joinedData, aes(x=Round, y=RankDiff)) + geom_line() + facet_wrap(~Drafter, ncol=2) + geom_hline(yintercept = 0, linetype=2) + geom_point(aes(color=Pos)) + ylab("Difference Between Pick # and Ranking")
+```
+
+## Conclusion
+Here are the key takeaways:
+
+- **Best Draft:** `r bd <- avgDiffs[which.min(avgDiffs$RankDiff),]; bd$Drafter` (avg pick `r bestDiff <- bd$RankDiff; abs(bestDiff)` positions `r if (bestDiff < 0) "under" else "over"` rank value)
+- **Worst Draft:** `r wd <- avgDiffs[which.max(avgDiffs$RankDiff),]; wd$Drafter` (avg pick `r worstDiff <- wd$RankDiff; abs(worstDiff)` positions `r if (worstDiff < 0) "under" else "over"` rank value)
+- **Best Pick:** Drafter: `r p <- joinedData[which.min(joinedData$RankDiff),]; p$Drafter`, Round: `r p$Round`, Player: `r p$Player`,  Rank Difference: `r p$RankDiff`
+- **Worst Pick:** Drafter: `r p <- joinedData[which.max(joinedData$RankDiff),]; p$Drafter`, Round: `r p$Round`, Player: `r p$Player`,  Rank Difference: `r p$RankDiff`
+
+## Pick Ledger
+
+```{r}
+rawTable <- joinedData[order(joinedData$PickNumber), c("PickNumber", "Round", "Drafter", "Player", "Rank", "RankDiff")]
+
+datatable(
+  rawTable,
+  colnames = c("Pick #", "Round", "Team", "Player", "ESPN Rank", "Rank Diff"),
+  filter = "top",
+  options = list(pageLength = 25, autoWidth = TRUE)
+)
+```
