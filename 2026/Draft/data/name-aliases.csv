@@ -1,0 +1,20 @@
+Position,InputPlayer,CanonicalPlayer,Reason
+RB,James Cook,James Cook III,Board omits the source's generational suffix III.
+RB,Kenneth Walker,Kenneth Walker III,Board omits the source's generational suffix III.
+RB,Aaron Jones,Aaron Jones Sr.,Board omits the source's suffix Sr.
+WR,Deebo Samuel,Deebo Samuel Sr.,Board omits the source's suffix Sr.
+WR,Marvin Harrison,Marvin Harrison Jr.,Board omits the source's suffix Jr.
+TE,Harold Fannin,Harold Fannin Jr.,Board omits the source's suffix Jr.
+WR,Luther Burden,Luther Burden III,Board omits the source's generational suffix III.
+TE,Kyle Pitts,Kyle Pitts Sr.,Board omits the source's suffix Sr.
+WR,Brian Thomas,Brian Thomas Jr.,Board omits the source's suffix Jr.
+RB,Kenneth Gainwell,Kenny Gainwell,Board uses Kenneth; source uses the established nickname Kenny for Gainwell.
+WR,Chris Godwin,Chris Godwin Jr.,Board omits the source's suffix Jr.
+DST,Houston Texans,Texans D/ST,Full franchise label maps to the source's defensive-unit label; DEF is normalized to DST.
+DST,Baltimore Ravens,Ravens D/ST,Full franchise label maps to the source's defensive-unit label; DEF is normalized to DST.
+DST,Denver Broncos,Broncos D/ST,Full franchise label maps to the source's defensive-unit label; DEF is normalized to DST.
+DST,Seattle Seahawks,Seahawks D/ST,Full franchise label maps to the source's defensive-unit label; DEF is normalized to DST.
+DST,Pittsburgh Steelers,Steelers D/ST,Full franchise label maps to the source's defensive-unit label; DEF is normalized to DST.
+DST,New England Patriots,Patriots D/ST,Full franchise label maps to the source's defensive-unit label; DEF is normalized to DST.
+DST,Chicago Bears,Bears D/ST,Full franchise label maps to a defensive-unit label; this unit is absent from the source Top 300.
+DST,Minnesota Vikings,Vikings D/ST,Full franchise label maps to a defensive-unit label; this unit is absent from the source Top 300.

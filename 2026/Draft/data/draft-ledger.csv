@@ -1,0 +1,129 @@
+"Round","Team","TeamSlot","PickInRound","PickNumber","RawLabel","Player","Position","CanonicalPlayer","MatchMethod","MatchReason","MatchStatus","Rank","PositionRank","NFLTeam","SalaryValue","Bye","Ranked","RankFloor","Surplus","SurplusFloor","LegacyScore"
+1,"Flames",1,1,1,"RB - Jahmyr Gibbs","Jahmyr Gibbs","RB","Jahmyr Gibbs","exact","Exact name and position match.","ranked",4,1,"DET",57,6,TRUE,4,-3,-3,3
+1,"Clint Bilton",2,2,2,"RB - Bijan Robinson","Bijan Robinson","RB","Bijan Robinson","exact","Exact name and position match.","ranked",5,2,"ATL",57,11,TRUE,5,-3,-3,3
+1,"NKFL",3,3,3,"RB - Saquon Barkley","Saquon Barkley","RB","Saquon Barkley","exact","Exact name and position match.","ranked",28,8,"PHI",29,10,TRUE,28,-25,-25,25
+1,"Fauxgendaz",4,4,4,"WR - Puka Nacua","Puka Nacua","WR","Puka Nacua","exact","Exact name and position match.","ranked",7,2,"LAR",53,11,TRUE,7,-3,-3,3
+1,"Purple Rain",5,5,5,"QB - Josh Allen","Josh Allen","QB","Josh Allen","exact","Exact name and position match.","ranked",1,1,"BUF",59,7,TRUE,1,4,4,-4
+1,"Rome Reigns",6,6,6,"RB - Christian McCaffrey","Christian McCaffrey","RB","Christian McCaffrey","exact","Exact name and position match.","ranked",9,3,"SF",49,8,TRUE,9,-3,-3,3
+1,"Magic Skol Bus",7,7,7,"QB - Jayden Daniels","Jayden Daniels","QB","Jayden Daniels","exact","Exact name and position match.","ranked",2,2,"WAS",58,7,TRUE,2,5,5,-5
+1,"Think Tank",8,8,8,"RB - James Cook","James Cook","RB","James Cook III","alias","Board omits the source's generational suffix III.","ranked",18,6,"BUF",37,7,TRUE,18,-10,-10,10
+2,"Think Tank",8,1,9,"RB - Jonathan Taylor","Jonathan Taylor","RB","Jonathan Taylor","exact","Exact name and position match.","ranked",12,4,"IND",44,13,TRUE,12,-3,-3,3
+2,"Magic Skol Bus",7,2,10,"QB - Lamar Jackson","Lamar Jackson","QB","Lamar Jackson","exact","Exact name and position match.","ranked",3,3,"BAL",58,13,TRUE,3,7,7,-7
+2,"Rome Reigns",6,3,11,"WR - Ja'Marr Chase","Ja'Marr Chase","WR","Ja'Marr Chase","exact","Exact name and position match.","ranked",6,1,"CIN",55,6,TRUE,6,5,5,-5
+2,"Purple Rain",5,4,12,"WR - Justin Jefferson","Justin Jefferson","WR","Justin Jefferson","exact","Exact name and position match.","ranked",19,6,"MIN",36,6,TRUE,19,-7,-7,7
+2,"Fauxgendaz",4,5,13,"RB - De'Von Achane","De'Von Achane","RB","De'Von Achane","exact","Exact name and position match.","ranked",15,5,"MIA",41,6,TRUE,15,-2,-2,2
+2,"NKFL",3,6,14,"QB - Drake Maye","Drake Maye","QB","Drake Maye","exact","Exact name and position match.","ranked",10,4,"NE",48,11,TRUE,10,4,4,-4
+2,"Clint Bilton",2,7,15,"WR - Jaxon Smith-Njigba","Jaxon Smith-Njigba","WR","Jaxon Smith-Njigba","exact","Exact name and position match.","ranked",8,3,"SEA",51,11,TRUE,8,7,7,-7
+2,"Flames",1,8,16,"QB - Kyler Murray","Kyler Murray","QB","Kyler Murray","exact","Exact name and position match.","ranked",60,16,"MIN",9,6,TRUE,60,-44,-44,44
+3,"Flames",1,1,17,"RB - Najee Harris","Najee Harris","RB","Najee Harris","exact","Exact name and position match.","ranked",199,56,"NYG",0,8,TRUE,199,-182,-182,182
+3,"Clint Bilton",2,2,18,"WR - Ladd McConkey","Ladd McConkey","WR","Ladd McConkey","exact","Exact name and position match.","ranked",54,20,"LAC",10,7,TRUE,54,-36,-36,36
+3,"NKFL",3,3,19,"RB - Kenneth Walker","Kenneth Walker","RB","Kenneth Walker III","alias","Board omits the source's generational suffix III.","ranked",31,11,"KC",26,5,TRUE,31,-12,-12,12
+3,"Fauxgendaz",4,4,20,"QB - Dak Prescott","Dak Prescott","QB","Dak Prescott","exact","Exact name and position match.","ranked",26,9,"DAL",30,14,TRUE,26,-6,-6,6
+3,"Purple Rain",5,5,21,"QB - Jalen Hurts","Jalen Hurts","QB","Jalen Hurts","exact","Exact name and position match.","ranked",11,5,"PHI",46,10,TRUE,11,10,10,-10
+3,"Rome Reigns",6,6,22,"WR - Amon-Ra St. Brown","Amon-Ra St. Brown","WR","Amon-Ra St. Brown","exact","Exact name and position match.","ranked",13,4,"DET",43,6,TRUE,13,9,9,-9
+3,"Magic Skol Bus",7,7,23,"WR - CeeDee Lamb","CeeDee Lamb","WR","CeeDee Lamb","exact","Exact name and position match.","ranked",14,5,"DAL",42,14,TRUE,14,9,9,-9
+3,"Think Tank",8,8,24,"WR - George Pickens","George Pickens","WR","George Pickens","exact","Exact name and position match.","ranked",48,14,"DAL",14,14,TRUE,48,-24,-24,24
+4,"Think Tank",8,1,25,"WR - Tee Higgins","Tee Higgins","WR","Tee Higgins","exact","Exact name and position match.","ranked",64,22,"CIN",7,6,TRUE,64,-39,-39,39
+4,"Magic Skol Bus",7,2,26,"WR - Drake London","Drake London","WR","Drake London","exact","Exact name and position match.","ranked",20,7,"ATL",35,11,TRUE,20,6,6,-6
+4,"Rome Reigns",6,3,27,"RB - Omarion Hampton","Omarion Hampton","RB","Omarion Hampton","exact","Exact name and position match.","ranked",41,13,"LAC",19,7,TRUE,41,-14,-14,14
+4,"Purple Rain",5,4,28,"WR - A.J. Brown","A.J. Brown","WR","A.J. Brown","exact","Exact name and position match.","ranked",35,10,"NE",22,11,TRUE,35,-7,-7,7
+4,"Fauxgendaz",4,5,29,"WR - Terry McLaurin","Terry McLaurin","WR","Terry McLaurin","exact","Exact name and position match.","ranked",55,21,"WAS",10,7,TRUE,55,-26,-26,26
+4,"NKFL",3,6,30,"TE - Colston Loveland","Colston Loveland","TE","Colston Loveland","exact","Exact name and position match.","ranked",62,3,"CHI",8,10,TRUE,62,-32,-32,32
+4,"Clint Bilton",2,7,31,"RB - Derrick Henry","Derrick Henry","RB","Derrick Henry","exact","Exact name and position match.","ranked",29,9,"BAL",28,13,TRUE,29,2,2,-2
+4,"Flames",1,8,32,"WR - Nico Collins","Nico Collins","WR","Nico Collins","exact","Exact name and position match.","ranked",24,9,"HOU",32,8,TRUE,24,8,8,-8
+5,"Flames",1,1,33,"RB - Jaylen Wright","Jaylen Wright","RB","Jaylen Wright","exact","Exact name and position match.","ranked",214,61,"MIA",0,6,TRUE,214,-181,-181,181
+5,"Clint Bilton",2,2,34,"QB - Joe Burrow","Joe Burrow","QB","Joe Burrow","exact","Exact name and position match.","ranked",16,6,"CIN",40,6,TRUE,16,18,18,-18
+5,"NKFL",3,3,35,"QB - Sam Darnold","Sam Darnold","QB","Sam Darnold","exact","Exact name and position match.","ranked",107,24,"SEA",2,11,TRUE,107,-72,-72,72
+5,"Fauxgendaz",4,4,36,"RB - Chuba Hubbard","Chuba Hubbard","RB","Chuba Hubbard","exact","Exact name and position match.","ranked",97,32,"CAR",2,5,TRUE,97,-61,-61,61
+5,"Purple Rain",5,5,37,"RB - Quinshon Judkins","Quinshon Judkins","RB","Quinshon Judkins","exact","Exact name and position match.","ranked",56,18,"CLE",10,11,TRUE,56,-19,-19,19
+5,"Rome Reigns",6,6,38,"TE - Brock Bowers","Brock Bowers","TE","Brock Bowers","exact","Exact name and position match.","ranked",32,2,"LV",25,13,TRUE,32,6,6,-6
+5,"Magic Skol Bus",7,7,39,"TE - Trey McBride","Trey McBride","TE","Trey McBride","exact","Exact name and position match.","ranked",21,1,"ARI",34,14,TRUE,21,18,18,-18
+5,"Think Tank",8,8,40,"RB - Kyren Williams","Kyren Williams","RB","Kyren Williams","exact","Exact name and position match.","ranked",46,17,"LAR",15,11,TRUE,46,-6,-6,6
+6,"Think Tank",8,1,41,"RB - Chase Brown","Chase Brown","RB","Chase Brown","exact","Exact name and position match.","ranked",40,12,"CIN",20,6,TRUE,40,1,1,-1
+6,"Magic Skol Bus",7,2,42,"RB - Ashton Jeanty","Ashton Jeanty","RB","Ashton Jeanty","exact","Exact name and position match.","ranked",30,10,"LV",26,13,TRUE,30,12,12,-12
+6,"Rome Reigns",6,3,43,"QB - Caleb Williams","Caleb Williams","QB","Caleb Williams","exact","Exact name and position match.","ranked",38,13,"CHI",21,10,TRUE,38,5,5,-5
+6,"Purple Rain",5,4,44,"WR - Tetairoa McMillan","Tetairoa McMillan","WR","Tetairoa McMillan","exact","Exact name and position match.","ranked",50,16,"CAR",13,5,TRUE,50,-6,-6,6
+6,"Fauxgendaz",4,5,45,"RB - Cam Skattebo","Cam Skattebo","RB","Cam Skattebo","exact","Exact name and position match.","ranked",57,19,"NYG",10,8,TRUE,57,-12,-12,12
+6,"NKFL",3,6,46,"WR - Emeka Egbuka","Emeka Egbuka","WR","Emeka Egbuka","exact","Exact name and position match.","ranked",52,18,"TB",11,10,TRUE,52,-6,-6,6
+6,"Clint Bilton",2,7,47,"QB - Trevor Lawrence","Trevor Lawrence","QB","Trevor Lawrence","exact","Exact name and position match.","ranked",25,8,"JAC",31,7,TRUE,25,22,22,-22
+6,"Flames",1,8,48,"WR - DK Metcalf","DK Metcalf","WR","DK Metcalf","exact","Exact name and position match.","ranked",85,32,"PIT",4,9,TRUE,85,-37,-37,37
+7,"Flames",1,1,49,"RB - Breece Hall","Breece Hall","RB","Breece Hall","exact","Exact name and position match.","ranked",42,14,"NYJ",19,13,TRUE,42,7,7,-7
+7,"Clint Bilton",2,2,50,"TE - Tucker Kraft","Tucker Kraft","TE","Tucker Kraft","exact","Exact name and position match.","ranked",102,9,"GB",2,11,TRUE,102,-52,-52,52
+7,"NKFL",3,3,51,"WR - Rome Odunze","Rome Odunze","WR","Rome Odunze","exact","Exact name and position match.","ranked",66,24,"CHI",7,10,TRUE,66,-15,-15,15
+7,"Fauxgendaz",4,4,52,"QB - Bo Nix","Bo Nix","QB","Bo Nix","exact","Exact name and position match.","ranked",27,10,"DEN",30,10,TRUE,27,25,25,-25
+7,"Purple Rain",5,5,53,"RB - Bucky Irving","Bucky Irving","RB","Bucky Irving","exact","Exact name and position match.","ranked",58,20,"TB",9,10,TRUE,58,-5,-5,5
+7,"Rome Reigns",6,6,54,"WR - Malik Nabers","Malik Nabers","WR","Malik Nabers","exact","Exact name and position match.","ranked",37,12,"NYG",22,8,TRUE,37,17,17,-17
+7,"Magic Skol Bus",7,7,55,"WR - Rashee Rice","Rashee Rice","WR","Rashee Rice","exact","Exact name and position match.","ranked",23,8,"KC",32,5,TRUE,23,32,32,-32
+7,"Think Tank",8,8,56,"QB - Brock Purdy","Brock Purdy","QB","Brock Purdy","exact","Exact name and position match.","ranked",33,11,"SF",24,8,TRUE,33,23,23,-23
+8,"Think Tank",8,1,57,"WR - DJ Moore","DJ Moore","WR","DJ Moore","exact","Exact name and position match.","ranked",68,26,"BUF",6,7,TRUE,68,-11,-11,11
+8,"Magic Skol Bus",7,2,58,"QB - Jaxson Dart","Jaxson Dart","QB","Jaxson Dart","exact","Exact name and position match.","ranked",17,7,"NYG",38,8,TRUE,17,41,41,-41
+8,"Rome Reigns",6,3,59,"WR - Chris Olave","Chris Olave","WR","Chris Olave","exact","Exact name and position match.","ranked",36,11,"NO",22,8,TRUE,36,23,23,-23
+8,"Purple Rain",5,4,60,"RB - Tony Pollard","Tony Pollard","RB","Tony Pollard","exact","Exact name and position match.","ranked",95,30,"TEN",3,9,TRUE,95,-35,-35,35
+8,"Fauxgendaz",4,5,61,"TE - Sam LaPorta","Sam LaPorta","TE","Sam LaPorta","exact","Exact name and position match.","ranked",76,7,"DET",5,6,TRUE,76,-15,-15,15
+8,"NKFL",3,6,62,"WR - DeVonta Smith","DeVonta Smith","WR","DeVonta Smith","exact","Exact name and position match.","ranked",51,17,"PHI",12,10,TRUE,51,11,11,-11
+8,"Clint Bilton",2,7,63,"WR - Zay Flowers","Zay Flowers","WR","Zay Flowers","exact","Exact name and position match.","ranked",49,15,"BAL",13,13,TRUE,49,14,14,-14
+8,"Flames",1,8,64,"TE - Travis Kelce","Travis Kelce","TE","Travis Kelce","exact","Exact name and position match.","ranked",113,11,"KC",2,5,TRUE,113,-49,-49,49
+9,"Flames",1,1,65,"QB - Tyler Shough","Tyler Shough","QB","Tyler Shough","exact","Exact name and position match.","ranked",61,17,"NO",8,8,TRUE,61,4,4,-4
+9,"Clint Bilton",2,2,66,"QB - C.J. Stroud","C.J. Stroud","QB","C.J. Stroud","exact","Exact name and position match.","ranked",106,23,"HOU",2,8,TRUE,106,-40,-40,40
+9,"NKFL",3,3,67,"WR - Mike Evans","Mike Evans","WR","Mike Evans","exact","Exact name and position match.","ranked",92,36,"SF",3,8,TRUE,92,-25,-25,25
+9,"Fauxgendaz",4,4,68,"WR - Deebo Samuel","Deebo Samuel","WR","Deebo Samuel Sr.","alias","Board omits the source's suffix Sr.","ranked",140,53,"SF",1,8,TRUE,140,-72,-72,72
+9,"Purple Rain",5,5,69,"WR - Marvin Harrison","Marvin Harrison","WR","Marvin Harrison Jr.","alias","Board omits the source's suffix Jr.","ranked",84,31,"ARI",4,14,TRUE,84,-15,-15,15
+9,"Rome Reigns",6,6,70,"RB - Jeremiyah Love","Jeremiyah Love","RB","Jeremiyah Love","exact","Exact name and position match.","ranked",22,7,"ARI",33,14,TRUE,22,48,48,-48
+9,"Magic Skol Bus",7,7,71,"RB - D'Andre Swift","D'Andre Swift","RB","D'Andre Swift","exact","Exact name and position match.","ranked",59,21,"CHI",9,10,TRUE,59,12,12,-12
+9,"Think Tank",8,8,72,"TE - Tyler Warren","Tyler Warren","TE","Tyler Warren","exact","Exact name and position match.","ranked",63,4,"IND",8,13,TRUE,63,9,9,-9
+10,"Think Tank",8,1,73,"QB - Matthew Stafford","Matthew Stafford","QB","Matthew Stafford","exact","Exact name and position match.","ranked",34,12,"LAR",23,11,TRUE,34,39,39,-39
+10,"Magic Skol Bus",7,2,74,"RB - Isiah Pacheco","Isiah Pacheco","RB","Isiah Pacheco","exact","Exact name and position match.","ranked",222,69,"DET",0,6,TRUE,222,-148,-148,148
+10,"Rome Reigns",6,3,75,"WR - Luther Burden","Luther Burden","WR","Luther Burden III","alias","Board omits the source's generational suffix III.","ranked",69,27,"CHI",6,10,TRUE,69,6,6,-6
+10,"Purple Rain",5,4,76,"QB - Justin Herbert","Justin Herbert","QB","Justin Herbert","exact","Exact name and position match.","ranked",39,14,"LAC",21,7,TRUE,39,37,37,-37
+10,"Fauxgendaz",4,5,77,"WR - Odell Beckham Jr.","Odell Beckham Jr.","WR","Odell Beckham Jr.","allowlist","User-confirmed Fauxgendaz round-10 selection; absent from this source Top 300.","unranked",,,,,,FALSE,301,,-224,224
+10,"NKFL",3,6,78,"RB - David Montgomery","David Montgomery","RB","David Montgomery","exact","Exact name and position match.","ranked",71,23,"HOU",6,8,TRUE,71,7,7,-7
+10,"Clint Bilton",2,7,79,"RB - TreVeyon Henderson","TreVeyon Henderson","RB","TreVeyon Henderson","exact","Exact name and position match.","ranked",90,29,"NE",3,11,TRUE,90,-11,-11,11
+10,"Flames",1,8,80,"WR - Cooper Kupp","Cooper Kupp","WR","Cooper Kupp","exact","Exact name and position match.","ranked",241,82,"SEA",0,11,TRUE,241,-161,-161,161
+11,"Flames",1,1,81,"WR - Davante Adams","Davante Adams","WR","Davante Adams","exact","Exact name and position match.","ranked",53,19,"LAR",11,11,TRUE,53,28,28,-28
+11,"Clint Bilton",2,2,82,"WR - Travis Hunter","Travis Hunter","WR","Travis Hunter","exact","Exact name and position match.","ranked",156,62,"JAC",1,7,TRUE,156,-74,-74,74
+11,"NKFL",3,3,83,"RB - Aaron Jones","Aaron Jones","RB","Aaron Jones Sr.","alias","Board omits the source's suffix Sr.","ranked",127,38,"MIN",1,6,TRUE,127,-44,-44,44
+11,"Fauxgendaz",4,4,84,"RB - Trevor Etienne","Trevor Etienne","RB","Trevor Etienne","allowlist","Trevor Etienne is the supplied player and is absent from this source Top 300; Travis Etienne Jr. is a different player.","unranked",,,,,,FALSE,301,,-217,217
+11,"Purple Rain",5,5,85,"RB - Javonte Williams","Javonte Williams","RB","Javonte Williams","exact","Exact name and position match.","ranked",43,15,"DAL",18,14,TRUE,43,42,42,-42
+11,"Rome Reigns",6,6,86,"RB - Jadarian Price","Jadarian Price","RB","Jadarian Price","exact","Exact name and position match.","ranked",72,24,"SEA",6,11,TRUE,72,14,14,-14
+11,"Magic Skol Bus",7,7,87,"RB - Josh Jacobs","Josh Jacobs","RB","Josh Jacobs","exact","Exact name and position match.","ranked",123,34,"GB",1,11,TRUE,123,-36,-36,36
+11,"Think Tank",8,8,88,"QB - Patrick Mahomes","Patrick Mahomes","QB","Patrick Mahomes","exact","Exact name and position match.","ranked",44,15,"KC",17,5,TRUE,44,44,44,-44
+12,"Think Tank",8,1,89,"WR - Garrett Wilson","Garrett Wilson","WR","Garrett Wilson","exact","Exact name and position match.","ranked",47,13,"NYJ",15,13,TRUE,47,42,42,-42
+12,"Magic Skol Bus",7,2,90,"TE - T.J. Hockenson","T.J. Hockenson","TE","T.J. Hockenson","exact","Exact name and position match.","ranked",129,16,"MIN",1,6,TRUE,129,-39,-39,39
+12,"Rome Reigns",6,3,91,"QB - Baker Mayfield","Baker Mayfield","QB","Baker Mayfield","exact","Exact name and position match.","ranked",81,20,"TB",4,10,TRUE,81,10,10,-10
+12,"Purple Rain",5,4,92,"WR - Courtland Sutton","Courtland Sutton","WR","Courtland Sutton","exact","Exact name and position match.","ranked",82,29,"DEN",4,10,TRUE,82,10,10,-10
+12,"Fauxgendaz",4,5,93,"WR - Makai Lemon","Makai Lemon","WR","Makai Lemon","exact","Exact name and position match.","ranked",138,51,"PHI",1,10,TRUE,138,-45,-45,45
+12,"NKFL",3,6,94,"RB - Zach Charbonnet","Zach Charbonnet","RB","Zach Charbonnet","exact","Exact name and position match.","ranked",146,44,"SEA",1,11,TRUE,146,-52,-52,52
+12,"Clint Bilton",2,7,95,"WR - Jordan Addison","Jordan Addison","WR","Jordan Addison","exact","Exact name and position match.","ranked",108,42,"MIN",2,6,TRUE,108,-13,-13,13
+12,"Flames",1,8,96,"QB - Jared Goff","Jared Goff","QB","Jared Goff","exact","Exact name and position match.","ranked",79,18,"DET",4,6,TRUE,79,17,17,-17
+13,"Flames",1,1,97,"WR - De'Zhaun Stribling","De'Zhaun Stribling","WR","De'Zhaun Stribling","exact","Exact name and position match.","ranked",109,43,"SF",2,8,TRUE,109,-12,-12,12
+13,"Clint Bilton",2,2,98,"TE - Mark Andrews","Mark Andrews","TE","Mark Andrews","exact","Exact name and position match.","ranked",115,13,"BAL",2,13,TRUE,115,-17,-17,17
+13,"NKFL",3,3,99,"TE - AJ Barner","AJ Barner","TE","AJ Barner","exact","Exact name and position match.","ranked",263,26,"SEA",0,11,TRUE,263,-164,-164,164
+13,"Fauxgendaz",4,4,100,"RB - Tank Bigsby","Tank Bigsby","RB","Tank Bigsby","exact","Exact name and position match.","ranked",195,53,"PHI",0,10,TRUE,195,-95,-95,95
+13,"Purple Rain",5,5,101,"RB - Bhayshul Tuten","Bhayshul Tuten","RB","Bhayshul Tuten","exact","Exact name and position match.","ranked",70,22,"JAC",6,7,TRUE,70,31,31,-31
+13,"Rome Reigns",6,6,102,"TE - Kyle Pitts","Kyle Pitts","TE","Kyle Pitts Sr.","alias","Board omits the source's suffix Sr.","ranked",74,5,"ATL",5,11,TRUE,74,28,28,-28
+13,"Magic Skol Bus",7,7,103,"RB - Kyle Monangai","Kyle Monangai","RB","Kyle Monangai","exact","Exact name and position match.","ranked",125,36,"CHI",1,10,TRUE,125,-22,-22,22
+13,"Think Tank",8,8,104,"RB - Kenneth Gainwell","Kenneth Gainwell","RB","Kenny Gainwell","alias","Board uses Kenneth; source uses the established nickname Kenny for Gainwell.","ranked",96,31,"TB",2,10,TRUE,96,8,8,-8
+14,"Think Tank",8,1,105,"WR - Chris Godwin","Chris Godwin","WR","Chris Godwin Jr.","alias","Board omits the source's suffix Jr.","ranked",139,52,"TB",1,10,TRUE,139,-34,-34,34
+14,"Magic Skol Bus",7,2,106,"WR - Jakobi Meyers","Jakobi Meyers","WR","Jakobi Meyers","exact","Exact name and position match.","ranked",100,40,"JAC",2,7,TRUE,100,6,6,-6
+14,"Rome Reigns",6,3,107,"WR - Brian Thomas","Brian Thomas","WR","Brian Thomas Jr.","alias","Board omits the source's suffix Jr.","ranked",94,38,"JAC",3,7,TRUE,94,13,13,-13
+14,"Purple Rain",5,4,108,"TE - Harold Fannin","Harold Fannin","TE","Harold Fannin Jr.","alias","Board omits the source's suffix Jr.","ranked",75,6,"CLE",5,11,TRUE,75,33,33,-33
+14,"Fauxgendaz",4,5,109,"TE - David Njoku","David Njoku","TE","David Njoku","exact","Exact name and position match.","ranked",299,31,"LAC",0,7,TRUE,299,-190,-190,190
+14,"NKFL",3,6,110,"WR - Quentin Johnston","Quentin Johnston","WR","Quentin Johnston","exact","Exact name and position match.","ranked",121,47,"LAC",1,7,TRUE,121,-11,-11,11
+14,"Clint Bilton",2,7,111,"WR - Matthew Golden","Matthew Golden","WR","Matthew Golden","exact","Exact name and position match.","ranked",93,37,"GB",3,11,TRUE,93,18,18,-18
+14,"Flames",1,8,112,"WR - Dontayvion Wicks","Dontayvion Wicks","WR","Dontayvion Wicks","exact","Exact name and position match.","ranked",203,69,"PHI",0,10,TRUE,203,-91,-91,91
+15,"Flames",1,1,113,"K - Harrison Butker","Harrison Butker","K","Harrison Butker","exact","Exact name and position match.","ranked",187,7,"KC",0,5,TRUE,187,-74,-74,74
+15,"Clint Bilton",2,2,114,"DEF - Houston Texans","Houston Texans","DST","Texans D/ST","alias","Full franchise label maps to the source's defensive-unit label; DEF is normalized to DST.","ranked",169,1,"HOU",0,8,TRUE,169,-55,-55,55
+15,"NKFL",3,3,115,"DEF - Baltimore Ravens","Baltimore Ravens","DST","Ravens D/ST","alias","Full franchise label maps to the source's defensive-unit label; DEF is normalized to DST.","ranked",174,6,"BAL",0,13,TRUE,174,-59,-59,59
+15,"Fauxgendaz",4,4,116,"DEF - Denver Broncos","Denver Broncos","DST","Broncos D/ST","alias","Full franchise label maps to the source's defensive-unit label; DEF is normalized to DST.","ranked",170,2,"DEN",0,10,TRUE,170,-54,-54,54
+15,"Purple Rain",5,5,117,"DEF - Seattle Seahawks","Seattle Seahawks","DST","Seahawks D/ST","alias","Full franchise label maps to the source's defensive-unit label; DEF is normalized to DST.","ranked",172,4,"SEA",0,11,TRUE,172,-55,-55,55
+15,"Rome Reigns",6,6,118,"DEF - Minnesota Vikings","Minnesota Vikings","DST","Vikings D/ST","alias","Full franchise label maps to a defensive-unit label; this unit is absent from the source Top 300. Minnesota defensive unit is absent from this source Top 300.","unranked",,,,,,FALSE,301,,-183,183
+15,"Magic Skol Bus",7,7,119,"K - Evan McPherson","Evan McPherson","K","Evan McPherson","exact","Exact name and position match.","ranked",269,15,"CIN",0,6,TRUE,269,-150,-150,150
+15,"Think Tank",8,8,120,"DEF - New England Patriots","New England Patriots","DST","Patriots D/ST","alias","Full franchise label maps to the source's defensive-unit label; DEF is normalized to DST.","ranked",177,9,"NE",0,11,TRUE,177,-57,-57,57
+16,"Think Tank",8,1,121,"K - Ka'imi Fairbairn","Ka'imi Fairbairn","K","Ka'imi Fairbairn","exact","Exact name and position match.","ranked",185,5,"HOU",0,8,TRUE,185,-64,-64,64
+16,"Magic Skol Bus",7,2,122,"DEF - Pittsburgh Steelers","Pittsburgh Steelers","DST","Steelers D/ST","alias","Full franchise label maps to the source's defensive-unit label; DEF is normalized to DST.","ranked",171,3,"PIT",0,9,TRUE,171,-49,-49,49
+16,"Rome Reigns",6,3,123,"K - Brandon Aubrey","Brandon Aubrey","K","Brandon Aubrey","exact","Exact name and position match.","ranked",181,1,"DAL",0,14,TRUE,181,-58,-58,58
+16,"Purple Rain",5,4,124,"K - Cameron Dicker","Cameron Dicker","K","Cameron Dicker","exact","Exact name and position match.","ranked",182,2,"LAC",0,7,TRUE,182,-58,-58,58
+16,"Fauxgendaz",4,5,125,"K - Tyler Bass","Tyler Bass","K","Tyler Bass","allowlist","Supplied kicker is absent from this source Top 300.","unranked",,,,,,FALSE,301,,-176,176
+16,"NKFL",3,6,126,"K - Trey Smack","Trey Smack","K","Trey Smack","exact","Exact name and position match.","ranked",296,17,"GB",0,11,TRUE,296,-170,-170,170
+16,"Clint Bilton",2,7,127,"K - Will Reichard","Will Reichard","K","Will Reichard","exact","Exact name and position match.","ranked",192,12,"MIN",0,6,TRUE,192,-65,-65,65
+16,"Flames",1,8,128,"DEF - Chicago Bears","Chicago Bears","DST","Bears D/ST","alias","Full franchise label maps to a defensive-unit label; this unit is absent from the source Top 300. Chicago defensive unit is absent from this source Top 300.","unranked",,,,,,FALSE,301,,-173,173

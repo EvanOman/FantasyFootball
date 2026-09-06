@@ -1,0 +1,24 @@
+{
+  "draft": {
+    "source": "Evan's supplied 2026 draft table in the September 6, 2026 conversation",
+    "teams": 8,
+    "rounds": 16,
+    "order": "Snake; columns are the first-round order, confirmed by Evan",
+    "correction": "Evan supplied Odell Beckham Jr. for Fauxgendaz round 10, overall pick 77",
+    "file": "draft-board-2026.csv"
+  },
+  "rankings": {
+    "source_site": "https://evanoman.com/board-calls/",
+    "download_url": "https://evanoman.com/board-calls/rankings.json",
+    "downloaded_on": "2026-09-06",
+    "source_pdf": "https://g.espncdn.com/s/ffldraftkit/26/NFL26_CS_Super.pdf?adddata=2026CS_Super",
+    "source_updated": "Wednesday, September 2, 2026",
+    "board_calls_fetched_at": "2026-09-04T13:21:57+00:00",
+    "scoring": "PPR Superflex",
+    "source_league_size": 10,
+    "source_lineup": "1 QB, 2 RB, 2 WR, 1 TE, 1 Flex, 1 Superflex, 1 K, 1 D/ST, 6 bench",
+    "actual_league_lineup": "Not supplied; no lineup or season-points forecast inferred",
+    "file": "board-calls-rankings.json"
+  },
+  "previous_analysis": "https://github.com/EvanOman/FantasyFootball/blob/16aaed22154da59f2492ca3be2045e22426a7d68/2025/Draft/index.Rmd"
+}
