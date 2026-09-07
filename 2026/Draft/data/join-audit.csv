@@ -82,7 +82,7 @@
 81,11,"Flames","WR - Davante Adams","Davante Adams","WR","Davante Adams","exact","ranked",53,"Exact name and position match."
 82,11,"Clint Bilton","WR - Travis Hunter","Travis Hunter","WR","Travis Hunter","exact","ranked",156,"Exact name and position match."
 83,11,"NKFL","RB - Aaron Jones","Aaron Jones","RB","Aaron Jones Sr.","alias","ranked",127,"Board omits the source's suffix Sr."
-84,11,"Fauxgendaz","RB - Trevor Etienne","Trevor Etienne","RB","Trevor Etienne","allowlist","unranked",,"Trevor Etienne is the supplied player and is absent from this source Top 300; Travis Etienne Jr. is a different player."
+84,11,"Fauxgendaz","RB - Travis Etienne Jr.","Travis Etienne Jr.","RB","Travis Etienne Jr.","exact","ranked",45,"Exact name and position match."
 85,11,"Purple Rain","RB - Javonte Williams","Javonte Williams","RB","Javonte Williams","exact","ranked",43,"Exact name and position match."
 86,11,"Rome Reigns","RB - Jadarian Price","Jadarian Price","RB","Jadarian Price","exact","ranked",72,"Exact name and position match."
 87,11,"Magic Skol Bus","RB - Josh Jacobs","Josh Jacobs","RB","Josh Jacobs","exact","ranked",123,"Exact name and position match."

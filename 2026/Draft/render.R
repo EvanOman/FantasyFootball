@@ -3,7 +3,7 @@
 args <- commandArgs(trailingOnly = FALSE)
 script <- sub("^--file=", "", args[grepl("^--file=", args)])
 if (length(script)) setwd(dirname(normalizePath(script)))
-required <- c("jsonlite", "knitr", "rmarkdown", "ggplot2", "DT", "htmltools")
+required <- c("jsonlite", "knitr", "rmarkdown", "ggplot2", "DT", "dplyr")
 missing <- required[!vapply(required, requireNamespace, logical(1), quietly = TRUE)]
 if (length(missing)) stop("Missing R dependencies: ", paste(missing, collapse = ", "))
 if (!rmarkdown::pandoc_available()) stop("Pandoc is required to render the report")

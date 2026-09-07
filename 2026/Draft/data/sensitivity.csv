@@ -5,8 +5,8 @@
 "Skill","Floor 301",301,"Magic Skol Bus",14,14,0,-6.92857142857143,-97,4
 "Skill","Floor 301",301,"Clint Bilton",14,14,0,-11.7857142857143,-165,5
 "Skill","Floor 301",301,"NKFL",14,14,0,-31.1428571428571,-436,6
-"Skill","Floor 301",301,"Flames",14,14,0,-49.7142857142857,-696,7
-"Skill","Floor 301",301,"Fauxgendaz",14,12,2,-67.3571428571429,-943,8
+"Skill","Floor 301",301,"Fauxgendaz",14,13,1,-49.0714285714286,-687,7
+"Skill","Floor 301",301,"Flames",14,14,0,-49.7142857142857,-696,8
 "Skill","Floor 350",350,"Rome Reigns",14,14,0,11.9285714285714,167,1
 "Skill","Floor 350",350,"Purple Rain",14,14,0,5.21428571428571,73,2
 "Skill","Floor 350",350,"Think Tank",14,14,0,2.78571428571429,39,3
@@ -14,7 +14,7 @@
 "Skill","Floor 350",350,"Clint Bilton",14,14,0,-11.7857142857143,-165,5
 "Skill","Floor 350",350,"NKFL",14,14,0,-31.1428571428571,-436,6
 "Skill","Floor 350",350,"Flames",14,14,0,-49.7142857142857,-696,7
-"Skill","Floor 350",350,"Fauxgendaz",14,12,2,-74.3571428571429,-1041,8
+"Skill","Floor 350",350,"Fauxgendaz",14,13,1,-52.5714285714286,-736,8
 "Skill","Floor 400",400,"Rome Reigns",14,14,0,11.9285714285714,167,1
 "Skill","Floor 400",400,"Purple Rain",14,14,0,5.21428571428571,73,2
 "Skill","Floor 400",400,"Think Tank",14,14,0,2.78571428571429,39,3
@@ -22,14 +22,14 @@
 "Skill","Floor 400",400,"Clint Bilton",14,14,0,-11.7857142857143,-165,5
 "Skill","Floor 400",400,"NKFL",14,14,0,-31.1428571428571,-436,6
 "Skill","Floor 400",400,"Flames",14,14,0,-49.7142857142857,-696,7
-"Skill","Floor 400",400,"Fauxgendaz",14,12,2,-81.5,-1141,8
+"Skill","Floor 400",400,"Fauxgendaz",14,13,1,-56.1428571428571,-786,8
 "Skill","Ranked only",,"Rome Reigns",14,14,0,11.9285714285714,167,1
 "Skill","Ranked only",,"Purple Rain",14,14,0,5.21428571428571,73,2
 "Skill","Ranked only",,"Think Tank",14,14,0,2.78571428571429,39,3
 "Skill","Ranked only",,"Magic Skol Bus",14,14,0,-6.92857142857143,-97,4
 "Skill","Ranked only",,"Clint Bilton",14,14,0,-11.7857142857143,-165,5
 "Skill","Ranked only",,"NKFL",14,14,0,-31.1428571428571,-436,6
-"Skill","Ranked only",,"Fauxgendaz",14,12,2,-41.8333333333333,-502,7
+"Skill","Ranked only",,"Fauxgendaz",14,13,1,-35.6153846153846,-463,7
 "Skill","Ranked only",,"Flames",14,14,0,-49.7142857142857,-696,8
 "Skill","First 8 rounds",,"Magic Skol Bus",8,8,0,16.25,130,1
 "Skill","First 8 rounds",,"Rome Reigns",8,8,0,6,48,2
@@ -45,8 +45,8 @@
 "All","Floor 301",301,"Clint Bilton",16,16,0,-17.8125,-285,4
 "All","Floor 301",301,"Magic Skol Bus",16,16,0,-18.5,-296,5
 "All","Floor 301",301,"NKFL",16,16,0,-41.5625,-665,6
-"All","Floor 301",301,"Flames",16,15,1,-58.9375,-943,7
-"All","Floor 301",301,"Fauxgendaz",16,13,3,-73.3125,-1173,8
+"All","Floor 301",301,"Fauxgendaz",16,14,2,-57.3125,-917,7
+"All","Floor 301",301,"Flames",16,15,1,-58.9375,-943,8
 "All","Floor 350",350,"Purple Rain",16,16,0,-2.5,-40,1
 "All","Floor 350",350,"Think Tank",16,16,0,-5.125,-82,2
 "All","Floor 350",350,"Rome Reigns",16,15,1,-7.6875,-123,3
@@ -54,7 +54,7 @@
 "All","Floor 350",350,"Magic Skol Bus",16,16,0,-18.5,-296,5
 "All","Floor 350",350,"NKFL",16,16,0,-41.5625,-665,6
 "All","Floor 350",350,"Flames",16,15,1,-62,-992,7
-"All","Floor 350",350,"Fauxgendaz",16,13,3,-82.5,-1320,8
+"All","Floor 350",350,"Fauxgendaz",16,14,2,-63.4375,-1015,8
 "All","Floor 400",400,"Purple Rain",16,16,0,-2.5,-40,1
 "All","Floor 400",400,"Think Tank",16,16,0,-5.125,-82,2
 "All","Floor 400",400,"Rome Reigns",16,15,1,-10.8125,-173,3
@@ -62,14 +62,14 @@
 "All","Floor 400",400,"Magic Skol Bus",16,16,0,-18.5,-296,5
 "All","Floor 400",400,"NKFL",16,16,0,-41.5625,-665,6
 "All","Floor 400",400,"Flames",16,15,1,-65.125,-1042,7
-"All","Floor 400",400,"Fauxgendaz",16,13,3,-91.875,-1470,8
+"All","Floor 400",400,"Fauxgendaz",16,14,2,-69.6875,-1115,8
 "All","Ranked only",,"Rome Reigns",16,15,1,7.26666666666667,109,1
 "All","Ranked only",,"Purple Rain",16,16,0,-2.5,-40,2
 "All","Ranked only",,"Think Tank",16,16,0,-5.125,-82,3
 "All","Ranked only",,"Clint Bilton",16,16,0,-17.8125,-285,4
 "All","Ranked only",,"Magic Skol Bus",16,16,0,-18.5,-296,5
-"All","Ranked only",,"NKFL",16,16,0,-41.5625,-665,6
-"All","Ranked only",,"Fauxgendaz",16,13,3,-42.7692307692308,-556,7
+"All","Ranked only",,"Fauxgendaz",16,14,2,-36.9285714285714,-517,6
+"All","Ranked only",,"NKFL",16,16,0,-41.5625,-665,7
 "All","Ranked only",,"Flames",16,15,1,-51.3333333333333,-770,8
 "All","First 8 rounds",,"Magic Skol Bus",8,8,0,16.25,130,1
 "All","First 8 rounds",,"Rome Reigns",8,8,0,6,48,2

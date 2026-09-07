@@ -1,383 +1,183 @@
 ---
 title: "4th Floor Fantasy Draft 2026"
-author: "Evan Oman · Analysis prepared with Codex"
+author: "Evan Oman"
 date: "September 6, 2026"
 output:
   html_document:
     toc: true
-    toc_depth: 2
-    toc_float:
-      collapsed: true
-    theme: flatly
-    highlight: textmate
-    self_contained: true
-    css: report.css
-    fig_caption: true
-    mathjax: null
 ---
 
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(fig.width=12, fig.height=8, fig.path='Figs/',
+                      echo=FALSE, warning=FALSE, message=FALSE)
+options(width=100)
+```
+
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE,
-                     fig.width = 10, fig.height = 5.8, dpi = 140,
-                     dev = "png", fig.path = "Figs/")
-source("R/analysis.R")
-result <- analyze_draft(".")
-ledger <- result$ledger
-rankings <- result$rankings
-skill <- subset(ledger, Position %in% c("QB", "RB", "WR", "TE"))
-ranked_skill <- subset(skill, Ranked)
-teams <- result$teams
-all_teams <- result$all_teams
-team_names <- unique(ledger$Team[order(ledger$TeamSlot)])
-palette <- setNames(c("#A63D40", "#806A2B", "#237A57", "#70578D", "#7E4A86", "#246A82", "#AF651D", "#39528D"), team_names)
-signed <- function(x, digits = 1) ifelse(is.na(x), "—", sprintf(paste0("%+.", digits, "f"), x))
-esc <- function(x) as.character(htmltools::htmlEscape(as.character(x)))
-table_html <- function(x, caption = NULL) {
-  cat('<div class="table-scroll">')
-  cat(knitr::kable(x, format = "html", row.names = FALSE, escape = TRUE, caption = caption,
-                  table.attr = 'class="table table-striped"'))
-  cat('</div>\n')
-}
-pick_table <- function(x) {
-  data.frame(Pick = x$PickNumber, Round = x$Round, Team = x$Team,
-             Player = x$Player, Pos = x$Position,
-             `ESPN rank` = ifelse(x$Ranked, x$Rank, "Unranked"),
-             Surplus = ifelse(x$Ranked, signed(x$Surplus, 0), paste0("≤", signed(x$SurplusFloor, 0))),
-             check.names = FALSE)
-}
-report_team_summary <- function(x) {
-  data.frame(Team = x$Team, Picks = x$Picks, Ranked = x$Scored, Unranked = x$Missing,
-             `Mean surplus*` = signed(x$MeanFloorSurplus),
-             `Ranked-only mean` = signed(x$MeanRankedSurplus),
-             `Ranked-only median` = signed(x$MedianRankedSurplus),
-             `Positive / ranked` = paste0(x$SurplusHits, "/", x$Scored), check.names = FALSE)
-}
-best_pick <- ranked_skill[which.max(ranked_skill$Surplus), ]
-worst_pick <- ranked_skill[which.min(ranked_skill$Surplus), ]
-unranked <- subset(ledger, !Ranked)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+This document looks at how our league handled the 2026 Fantasy Football Draft. We have drafted without cheatsheets since 2016, so every manager has to arrive with their own plan. That setup leads to big swings in pick quality, which makes the draft a fun case study each year.
+
+Throughout the analysis I use the ESPN Superflex PPR rankings as a proxy for player value. The list is far from perfect, but it serves as a consistent yardstick for comparing draft decisions.
+
+Source code and data live at https://github.com/EvanOman/FantasyFootball, and you can reach me via http://www.evanoman.com.
+
+Let the fun begin!
+
+## Data Preparation
+
+The draft data uses the confirmed eight-team snake order and includes all 128 picks. Fauxgendaz's round-11 Etienne entry is treated as Travis Etienne Jr. (ESPN rank 45), based on Evan's recollection that the higher-ranked Etienne was drafted. The supplied table contains only one Etienne entry.
+
+Load the data:
+
+```{r}
+draftData <- read.csv("./data/Draft2026.csv", stringsAsFactors = FALSE)
+
+# Align column names with the rest of the workflow
+names(draftData)[names(draftData) == "OverallPick"] <- "PickNumber"
+names(draftData)[names(draftData) == "Position"] <- "Pos"
+names(draftData)[names(draftData) == "FantasyTeam"] <- "Drafter"
+
+print.data.frame(head(draftData), row.names = FALSE)
+```
+
+The file is already in the tall format we need, so we can move straight to the rankings.
+
+For 2026 we use the September 2 ESPN PPR Superflex Top 300 from [Board Calls](https://evanoman.com/board-calls/). ESPN's sheet assumes 10 teams; our draft has eight. Rankings provide the same comparison as last year's report.
+
+```{r}
+rankings <- read.csv("./data/espn_superflex_ppr_2026.csv", stringsAsFactors = FALSE)
+
+# Keep positional labels from the rankings distinct from the draft data
+names(rankings)[names(rankings) == "Pos"] <- "RankPos"
+
+# Read player as string, not factor
+rankings$Player <- as.character(rankings$Player)
+
+print.data.frame(head(rankings, n=10), row.names=FALSE)
+```
+
+This dataset is also tall, so no additional reshaping is necessary. With both tables ready we join `draftData` and `rankings` on `Player`. Because this is a left join, every draft pick is retained even if the player falls outside the top 300. Names and positions are checked before export. The four players or defenses absent from the Top 300 use `nrow(rankings) + 1` (301) as a comparison value, following the previous report; 301 is not an observed ESPN rank.
+
+```{r}
+library("dplyr")
+library("DT")
+
+# Join rankings data with draft data
+joinedData <- left_join(draftData, rankings, by="Player")
+
+# Some players will not have a  ranking, give these players a worst ranking + 1
+joinedData$Rank[is.na(joinedData$Rank)] <- nrow(rankings) + 1
+
+print.data.frame(head(joinedData, n=10), row.names=FALSE)
+```
+
+The result contains every pick, its pick number, and the ESPN ranking. From here we can measure pick quality using the difference between those two numbers.
+
+```{r}
+joinedData$RankDiff <- joinedData$Rank - joinedData$PickNumber
+
+print.data.frame(head(joinedData, n=10), row.names=FALSE)
+```
+
+With the data prepped we can move on to summarizing the draft.
+
+## Figures and Results
+
+A natural starting point is the average difference between pick number and rank for each drafter. We calculate that with `aggregate`.
+
+```{r}
+avgDiffs <- aggregate(RankDiff ~ Drafter, joinedData, FUN=mean)
+
+# Order factor by worst draft to best
+avgDiffs <- within(avgDiffs, Drafter <- factor(Drafter, levels=avgDiffs[order(avgDiffs$RankDiff), "Drafter"]))
+
+# Order dataframe by worst draft to best
+avgDiffs <- avgDiffs[order(avgDiffs$RankDiff, decreasing = FALSE),]
+
+print.data.frame(avgDiffs, row.names=FALSE)
+```
+
+From this table we learn that `r bd <- avgDiffs[which.min(avgDiffs$RankDiff),]; bd$Drafter` had the lowest average rank difference (his average pick was `r bestDiff <- bd$RankDiff; abs(bestDiff)` slots `r if (bestDiff < 0) "later than" else "earlier than"` the ESPN rank) while `r wd <- avgDiffs[which.max(avgDiffs$RankDiff),]; wd$Drafter` struggled the most (averaging `r worstDiff <- wd$RankDiff; abs(worstDiff)` spots `r if (worstDiff < 0) "later than" else "earlier than"` the ESPN rank). The bar chart below gives the same view at a glance.
+
+```{r}
 library(ggplot2)
-theme_set(theme_minimal(base_size = 12) + theme(
-  plot.background = element_rect(fill = "#faf9f4", color = NA),
-  panel.grid.minor = element_blank(),
-  plot.title = element_text(face = "bold", size = 16, color = "#17302f"),
-  plot.subtitle = element_text(color = "#526460", size = 11),
-  legend.position = "bottom", legend.title = element_blank(),
-  axis.title = element_text(color = "#526460")))
+ggplot(avgDiffs, aes(x=Drafter, y=RankDiff)) + geom_bar(stat = "identity") + ylab("Mean Difference Between Pick # and Ranking")
 ```
 
-## Rome leads on offense; Purple leads with every position included
+Kickers and defenses affect the averages, so I also check the results after removing those positions:
 
-Rome Reigns has the largest average gap in its favor against ESPN among QB, RB, WR, and TE selections: **`r signed(teams$MeanFloorSurplus[teams$Team == "Rome Reigns"])` places per pick**. Purple Rain is next at `r signed(teams$MeanFloorSurplus[teams$Team == "Purple Rain"])`. Add kickers and defenses, using the 301 boundary for unranked selections, and Purple Rain leads at `r signed(all_teams$MeanFloorSurplus[all_teams$Team == "Purple Rain"])`, followed by Rome at `r signed(all_teams$MeanFloorSurplus[all_teams$Team == "Rome Reigns"])`. The choice of positions changes the leader.
+```{r}
+noKorDst <- joinedData[!(joinedData$Pos %in% c("DST", "K")), ]
 
-The largest ranked bargain is **`r best_pick$Player`**, taken by `r best_pick$Team` at pick `r best_pick$PickNumber` against ESPN rank `r best_pick$Rank`, a `r signed(best_pick$Surplus, 0)` gap. The largest ranked offensive reach is **`r worst_pick$Player`**, taken by `r worst_pick$Team` at pick `r worst_pick$PickNumber` against rank `r worst_pick$Rank` (`r signed(worst_pick$Surplus, 0)`). These labels describe agreement with ESPN's preseason board. They do not predict points or the league winner.
+avgDiffs2 <- aggregate(RankDiff ~ Drafter, noKorDst, FUN=mean)
 
-```{r metrics, results='asis'}
-cat(sprintf('<div class="metric-strip"><div class="metric"><b>%d</b><span>teams · confirmed snake order</span></div><div class="metric"><b>%d</b><span>picks · all 16 rounds filled</span></div><div class="metric"><b>%d</b><span>matched to ESPN Top 300</span></div><div class="metric"><b>%d</b><span>genuinely outside the board</span></div></div>', length(team_names), nrow(ledger), sum(ledger$Ranked), sum(!ledger$Ranked)))
+# Order factor by worst draft to best
+avgDiffs2 <- within(avgDiffs2, Drafter <- factor(Drafter, levels=avgDiffs[order(avgDiffs$RankDiff), "Drafter"]))
+
+# Order dataframe by worst draft to best
+avgDiffs2 <- avgDiffs2[order(avgDiffs2$RankDiff, decreasing = FALSE),]
+
+print.data.frame(avgDiffs2, row.names=FALSE)
+```
+Next I look at positional trends to see which spots were over- or undervalued.
+
+```{r}
+posDiffs <- aggregate(RankDiff ~ Pos, joinedData, FUN=mean)
+
+posDiffs <- within(posDiffs, Pos <- factor(Pos, levels=posDiffs[order(posDiffs$RankDiff), "Pos"]))
+
+# Order dataframe by worst draft to best
+posDiffs <- posDiffs[order(posDiffs$RankDiff, decreasing = FALSE),]
+
+print.data.frame(posDiffs, row.names=FALSE)
+
+ggplot(posDiffs, aes(x=Pos, y=RankDiff)) + geom_bar(stat = "identity") + ylab("Mean Difference Between Pick # and Ranking")
 ```
 
-<div class="callout">
-<p><strong>Reading the scores:</strong> surplus = overall pick − ESPN rank. Positive means the player lasted beyond his ESPN rank; negative means he went earlier. Where a selection is absent from the Top 300, tables marked with an asterisk use 301 as a boundary for comparison. Its actual rank is unknown, and its surplus could be worse. Both ranked-only results and alternative penalties appear below.</p>
-</div>
+The chart shows that `r bpd <- posDiffs[which.min(posDiffs$RankDiff),]; bestDiff <- bpd$RankDiff; bpd$Pos` were `r if (bestDiff < 0) "under" else "over"` valued by `r abs(bestDiff)` picks on average, while `r wpd <- posDiffs[which.max(posDiffs$RankDiff),]; worstDiff <- wpd$RankDiff; wpd$Pos` were `r if (worstDiff < 0) "under" else "over"` valued by `r abs(worstDiff)` picks.
 
-[Search all picks](#the-pick-ledger-is-searchable) · [See each team](#each-team-has-a-different-pattern) · [Download the ledger](data/draft-ledger.csv)
+The next two plots chart `Pick #` versus `Rank` with a diagonal "break-even" line. Points below the line were bargains; points above were reaches. The first plot highlights drafters and the second highlights positions.
 
-## The inputs and joins are auditable
-
-The [2025 analysis](../../2025/Draft/) used ESPN PPR Superflex rankings to compare every pick, manager, and position. This report carries that coverage into 2026 using the rankings from [Board Calls](https://evanoman.com/board-calls/). Its [ESPN source sheet](https://g.espncdn.com/s/ffldraftkit/26/NFL26_CS_Super.pdf?adddata=2026CS_Super) was updated **September 2, 2026**; Board Calls downloaded it September 4. All 300 entries and their seven fields were independently checked against the source PDF on September 6 and matched.
-
-Evan supplied the 16-round draft grid and confirmed that the columns give the first-round order, with the order reversed each even round. He also filled Fauxgendaz's round-10 blank with Odell Beckham Jr. That puts Beckham at pick 77; later picks retain their original numbers. The [input CSV](data/draft-board-2026.csv) contains all 128 selections.
-
-ESPN's sheet assumes a **10-team PPR Superflex league**. This draft has eight teams. The actual lineup requirements were not supplied, so the analysis uses ESPN as an external benchmark and makes no starting-lineup, scoring, or season-points forecast. The mismatch especially affects how early kickers and defenses look: this draft ends at 128, while ESPN's first defense is rank 169 and first kicker is rank 181.
-
-### Name corrections preserve player identity
-
-Names join through explicit, position-specific aliases. Original spellings remain in the ledger. Suffixes and nicknames account for the player changes; full defense names become ESPN's D/ST labels. No fuzzy matches are accepted.
-
-```{r aliases, results='asis'}
-changed <- ledger[ledger$Player != ledger$CanonicalPlayer, ]
-table_html(data.frame(`Supplied name` = changed$Player, `ESPN / canonical name` = changed$CanonicalPlayer,
-                      Position = changed$Position, Status = changed$MatchStatus,
-                      check.names = FALSE), "Every renamed selection; a canonical name does not itself establish a Top 300 match.")
+```{r}
+# Scatter colored by drafter
+ggplot(joinedData, aes(x=PickNumber,y=Rank)) + geom_point(aes(color=Drafter)) + geom_abline() + xlab("Pick #")
 ```
 
-### Five selections have no ESPN rank
-
-```{r unmatched, results='asis'}
-table_html(pick_table(unranked), "Unranked selections. The ≤ score uses the 301 boundary; it is not an observed rank.")
+```{r}
+# Scatter colored by position
+ggplot(joinedData, aes(x=PickNumber,y=Rank)) + geom_point(aes(color=Pos)) + geom_abline() + xlab("Pick #")
 ```
 
-Trevor Etienne remains separate from Travis Etienne Jr., whom ESPN ranks 45th. Beckham, Etienne, Tyler Bass, and the Minnesota and Chicago defenses are absent from the supplied Top 300. Their rank stays empty in the raw joined data; 301 appears only in the separate comparison field. The [join audit](data/join-audit.csv) records the method and explanation for every pick.
+The largest gaps show which picks differed most from ESPN's rankings.
 
-## Offensive picks give the clearest team comparison
+Finally, I look at the round-by-round swings for each drafter. In the figure below, anything below the dashed line is a win and anything above is a reach.
 
-Each team selected 14 players across QB, RB, WR, and TE. Excluding K/D/ST gives equal-sized groups while removing their large position-driven gaps. The table orders teams by mean surplus across those 14 picks, using the 301 boundary for the two unranked selections on Fauxgendaz. A positive average means a team's selections collectively lasted beyond their ESPN ranks.
-
-```{r skill-summary, results='asis'}
-table_html(report_team_summary(teams), "Asterisk: unranked selections use 301 only in the first mean; Fauxgendaz's mean is an upper bound. Higher surplus is better relative to ESPN.")
+```{r}
+# Scatter colored by position, faceted by drafter
+ggplot(joinedData, aes(x=Round, y=RankDiff)) + geom_line() + facet_wrap(~Drafter, ncol=2) + geom_hline(yintercept = 0, linetype=2) + geom_point(aes(color=Pos)) + ylab("Difference Between Pick # and Ranking")
 ```
 
-```{r skill-chart, fig.alt='Horizontal bars compare mean offensive pick surplus for eight teams; Rome leads and Fauxgendaz has the lowest 301-boundary mean.'}
-chart <- teams
-chart$Team <- factor(chart$Team, levels = rev(teams$Team))
-ggplot(chart, aes(MeanFloorSurplus, Team, fill = Team)) +
-  geom_col(width = .65) + geom_vline(xintercept = 0, color = "#17302f") +
-  geom_text(aes(label = signed(MeanFloorSurplus)), hjust = ifelse(chart$MeanFloorSurplus >= 0, -.15, 1.15), size = 3.5) +
-  scale_fill_manual(values = palette, guide = "none") +
-  scale_x_continuous(expand = expansion(mult = c(.2, .2))) +
-  labs(title = "Rome gets the largest offensive ranking discount", subtitle = "QB / RB / WR / TE · Fauxgendaz's two unranked picks use the 301 boundary",
-       x = "Average pick − ESPN rank (positive = later than rank)", y = NULL)
+## Conclusion
+Here are the key takeaways using all positions and the same rank-difference measure as before:
+
+- **Best Draft:** `r bd <- avgDiffs[which.min(avgDiffs$RankDiff),]; bd$Drafter` (avg pick `r bestDiff <- bd$RankDiff; abs(bestDiff)` positions `r if (bestDiff < 0) "later than" else "earlier than"` ESPN rank)
+- **Worst Draft:** `r wd <- avgDiffs[which.max(avgDiffs$RankDiff),]; wd$Drafter` (avg pick `r worstDiff <- wd$RankDiff; abs(worstDiff)` positions `r if (worstDiff < 0) "later than" else "earlier than"` ESPN rank)
+- **Best Pick:** Drafter: `r p <- joinedData[which.min(joinedData$RankDiff),]; p$Drafter`, Round: `r p$Round`, Player: `r p$Player`,  Rank Difference: `r p$RankDiff`
+- **Worst Pick:** Drafter: `r p <- joinedData[which.max(joinedData$RankDiff),]; p$Drafter`, Round: `r p$Round`, Player: `r p$Player`,  Rank Difference: `r p$RankDiff`
+
+## Pick Ledger
+
+```{r}
+rawTable <- joinedData[order(joinedData$PickNumber), c("PickNumber", "Round", "Drafter", "Player", "Rank", "RankDiff")]
+
+datatable(
+  rawTable,
+  colnames = c("Pick #", "Round", "Team", "Player", "ESPN Rank", "Rank Diff"),
+  filter = "top",
+  options = list(pageLength = 25, autoWidth = TRUE)
+)
 ```
-
-Means give every rank place equal weight, so a late reach can overwhelm several early bargains. The ranked-only median gives another view of the typical matched pick. Rank gaps are ordinal distances: a 20-place gain near the top need not be worth the same points as a 20-place gain near rank 200.
-
-### Including K/D/ST changes the ordering
-
-```{r all-summary, results='asis'}
-table_html(report_team_summary(all_teams), "Asterisk: all 16 selections per team; the five unranked picks use the 301 boundary in the first mean.")
-```
-
-Rome selected the unranked Minnesota defense, while Purple selected Seattle at ESPN rank 172. That makes the treatment of K/D/ST consequential. All teams have a negative all-position mean under the 301 convention; that alone does not establish that all eight drafted badly. They had only 128 picks and each took a kicker and defense.
-
-```{r scope-comparison, fig.alt='Paired dots show how including kicker and defense shifts each team’s mean surplus downward.'}
-comparison <- rbind(data.frame(Team = teams$Team, Score = teams$MeanFloorSurplus, Scope = "Offense"),
-                    data.frame(Team = all_teams$Team, Score = all_teams$MeanFloorSurplus, Scope = "All positions"))
-comparison$Team <- factor(comparison$Team, levels = rev(teams$Team))
-ggplot(comparison, aes(Score, Team)) + geom_line(aes(group = Team), color = "#bcc9bf", linewidth = 1) +
-  geom_point(aes(color = Scope, shape = Scope), size = 3.2) +
-  geom_vline(xintercept = 0, linetype = 2, color = "#80958b") +
-  scale_color_manual(values = c("All positions" = "#9A633A", Offense = "#147465")) +
-  labs(title = "Position scope changes the result", subtitle = "Both comparisons use the same 301 boundary for unranked picks", x = "Mean surplus", y = NULL)
-```
-
-## The sensitivity check separates stable results from assumptions
-
-301 is the best possible continuation rank for a selection absent from a complete Top 300. The 350 and 400 columns test harsher hypothetical ranks, not estimates of where those players belong. The ranked-only column drops unmatched players and therefore compares different roster coverage. All scores below use offensive selections.
-
-```{r sensitivity, results='asis'}
-sens <- result$sensitivity
-scenarios <- c("Floor 301", "Floor 350", "Floor 400", "Ranked only", "First 8 rounds")
-wide <- data.frame(Team = teams$Team, check.names = FALSE)
-for (s in scenarios) {
-  vals <- subset(sens, Scope == "Skill" & Scenario == s)
-  wide[[s]] <- signed(vals$MeanSurplus[match(wide$Team, vals$Team)])
-}
-table_html(wide, "Mean offensive surplus under each comparison. First eight rounds contain only ranked selections and compare the same eight picks per team.")
-```
-
-Rome's offensive lead over Purple does not depend on an unranked-player penalty: both teams' 14 offensive picks are ranked. Fauxgendaz's placement does depend on it. Dropping Beckham and Trevor Etienne improves Fauxgendaz's mean from `r signed(teams$MeanFloorSurplus[teams$Team == "Fauxgendaz"])` to `r signed(teams$MeanRankedSurplus[teams$Team == "Fauxgendaz"])`, enough to move ahead of Flames in the ranked-only comparison. That improvement reflects excluded picks and should not be treated as a stronger complete draft.
-
-The first-eight-round comparison asks a different question: how teams drafted before the late selections. Its leader is `r result$first_eight$Team[1]` at `r signed(result$first_eight$MeanFloorSurplus[1])`. The full [sensitivity CSV](data/sensitivity.csv) also includes all-position results.
-
-## Bargains and reaches show where the gaps came from
-
-### The biggest ranked bargains
-
-```{r bargains, results='asis'}
-table_html(pick_table(head(ranked_skill[order(-ranked_skill$Surplus, ranked_skill$PickNumber), ], 12)),
-           "Largest positive gaps among ranked offensive picks. Ties break by earlier pick.")
-```
-
-### The biggest ranked reaches
-
-```{r reaches, results='asis'}
-table_html(pick_table(head(ranked_skill[order(ranked_skill$Surplus, ranked_skill$PickNumber), ], 12)),
-           "Most negative gaps among ranked offensive picks. The five unranked picks are listed separately above.")
-```
-
-A bargain here means a player was drafted later than ESPN's rank. It does not establish that the player was the best available fit for that roster. The analysis has neither the league's full roster constraints nor a points model to make that claim.
-
-## Quarterbacks lasted; special teams went early
-
-```{r position-summary, results='asis'}
-pos_order <- c("QB", "RB", "WR", "TE", "K", "DST")
-pos_stats <- do.call(rbind, lapply(pos_order, function(p) {
-  z <- ledger[ledger$Position == p, ]
-  data.frame(Position = p, Picks = nrow(z), Ranked = sum(z$Ranked), Unranked = sum(!z$Ranked),
-             Mean = mean(z$SurplusFloor), RankedMean = mean(z$Surplus, na.rm = TRUE),
-             Median = median(z$Surplus, na.rm = TRUE))
-}))
-shown <- pos_stats
-names(shown)[5:7] <- c("Mean surplus*", "Ranked-only mean", "Ranked-only median")
-shown[5:7] <- lapply(shown[5:7], signed)
-table_html(shown, "Asterisk: mean surplus uses the 301 boundary for unranked selections. Position groups have different sample sizes and roster roles.")
-```
-
-```{r position-chart, fig.height=4.8, fig.alt='Bars compare ranking surplus by position, distinguishing ranked-only means from 301-boundary means.'}
-pos_long <- rbind(data.frame(Position = pos_stats$Position, Score = pos_stats$Mean, Measure = "All picks, 301 boundary"),
-                  data.frame(Position = pos_stats$Position, Score = pos_stats$RankedMean, Measure = "Ranked only"))
-pos_long$Position <- factor(pos_long$Position, levels = pos_order)
-ggplot(pos_long, aes(Position, Score, fill = Measure)) + geom_col(position = "dodge", width = .65) +
-  geom_hline(yintercept = 0, color = "#17302f") +
-  scale_fill_manual(values = c("All picks, 301 boundary" = "#147465", "Ranked only" = "#BD895E")) +
-  labs(title = "The gaps differ sharply by position", x = NULL, y = "Mean pick − ESPN rank")
-```
-
-Among ranked selections, quarterbacks averaged `r signed(pos_stats$RankedMean[pos_stats$Position == "QB"])` places of surplus. The K/D/ST gaps partly reflect the source's 10-team assumptions and its placement of those positions beyond pick 128. They should not be read as a direct estimate of position value in this league.
-
-### The roster counts show each team's allocation
-
-```{r roster-counts, results='asis'}
-table_html(result$positions, "Counts of drafted players, including unranked selections. No starter/bench assignment is inferred.")
-```
-
-## Pick versus rank makes the outliers visible
-
-Points below the diagonal lasted beyond their ESPN rank. Points above it went early. Open triangles at 301 mark unranked selections at the comparison boundary; their actual rank is unknown. Both views retain all 128 picks.
-
-```{r scatter-team, fig.height=6.3, fig.alt='Scatterplot of all 128 picks against ESPN rank, colored by team; five open triangles mark unranked picks at the 301 boundary.'}
-ggplot(ledger, aes(PickNumber, RankFloor)) +
-  geom_abline(slope = 1, intercept = 0, color = "#758C80", linetype = 2) +
-  geom_point(aes(color = Team, shape = MatchStatus), size = 2.6, alpha = .88) +
-  scale_color_manual(values = palette) + scale_shape_manual(values = c(ranked = 16, unranked = 2)) +
-  scale_y_continuous(breaks = c(1, 50, 100, 150, 200, 250, 301), labels = c("1", "50", "100", "150", "200", "250", "301*")) +
-  labs(title = "Every pick, colored by team", subtitle = "Below the line = bargain against ESPN · * unranked boundary",
-       x = "Overall pick", y = "ESPN rank / 301 boundary")
-```
-
-```{r scatter-position, fig.height=6.3, fig.alt='The same 128-pick scatterplot colored by position highlights late kicker and defense ranks.'}
-ggplot(ledger, aes(PickNumber, RankFloor)) +
-  geom_abline(slope = 1, intercept = 0, color = "#758C80", linetype = 2) +
-  geom_point(aes(color = Position, shape = MatchStatus), size = 2.6, alpha = .88) +
-  scale_color_manual(values = c(QB = "#147465", RB = "#AD6530", WR = "#425F9B", TE = "#846097", K = "#9A3B56", DST = "#555D5E")) +
-  scale_shape_manual(values = c(ranked = 16, unranked = 2)) +
-  scale_y_continuous(breaks = c(1, 50, 100, 150, 200, 250, 301), labels = c("1", "50", "100", "150", "200", "250", "301*")) +
-  labs(title = "The same picks, colored by position", subtitle = "* Unranked selections sit at the 301 comparison boundary",
-       x = "Overall pick", y = "ESPN rank / 301 boundary")
-```
-
-## The round-by-round view shows when teams diverged
-
-The first chart shows each pick's surplus, including kickers and defenses. Its shared vertical scale makes teams comparable. A negative late pick can be large even when it has little practical fantasy value; the rank-distance metric has no points weighting.
-
-```{r rounds, fig.height=11, fig.alt='Eight team panels show surplus for rounds 1 through 16 on a shared scale; unranked picks use open triangles at the 301 boundary.'}
-ggplot(ledger, aes(Round, SurplusFloor)) +
-  geom_hline(yintercept = 0, color = "#758C80", linetype = 2) +
-  geom_line(color = "#879B8D", linewidth = .5) +
-  geom_point(aes(color = Position, shape = MatchStatus), size = 2.3) +
-  facet_wrap(~factor(Team, levels = team_names), ncol = 2) +
-  scale_x_continuous(breaks = c(1, 4, 8, 12, 16)) +
-  scale_color_manual(values = c(QB = "#147465", RB = "#AD6530", WR = "#425F9B", TE = "#846097", K = "#9A3B56", DST = "#555D5E")) +
-  scale_shape_manual(values = c(ranked = 16, unranked = 2)) +
-  labs(title = "Each round's gap against ESPN", subtitle = "All positions · unranked scores use the 301 boundary", x = "Round", y = "Pick − rank / boundary")
-```
-
-The cumulative chart isolates the 14 offensive rounds. It adds rank gaps, so it shows where the final mean came from; it is not cumulative projected scoring. Fauxgendaz's line uses the 301 boundary from round 10 onward.
-
-```{r cumulative, fig.height=6.5, fig.alt='Cumulative offensive surplus through round 14, with one line per team; Rome finishes highest.'}
-cum <- skill[order(skill$TeamSlot, skill$Round), ]
-cum$Cumulative <- ave(cum$SurplusFloor, cum$Team, FUN = cumsum)
-ggplot(cum, aes(Round, Cumulative, color = Team)) + geom_hline(yintercept = 0, color = "#A9B9AE", linetype = 2) +
-  geom_line(linewidth = .85) + geom_point(size = 1.8) +
-  scale_color_manual(values = palette) + scale_x_continuous(breaks = c(1, 4, 8, 10, 12, 14)) +
-  labs(title = "How the offensive ranking gaps accumulate", x = "Round", y = "Cumulative surplus (301 boundary where unranked)")
-```
-
-## The full draft board preserves the original layout
-
-Read odd rounds left to right and even rounds right to left. Green cells have positive surplus, tan cells have negative surplus, and purple cells are unranked. The pick number in each cell follows the confirmed snake order. On a phone, scroll the board sideways.
-
-```{r draft-board, results='asis'}
-cat('<div class="table-scroll"><table class="draft-board table"><caption>Original team columns with verified overall pick numbers and rank matches.</caption><thead><tr><th>Rnd</th>')
-for (tm in team_names) cat('<th>', esc(tm), '</th>', sep = '')
-cat('</tr></thead><tbody>')
-for (rd in 1:16) {
-  cat('<tr><th>', rd, ifelse(rd %% 2 == 1, ' →', ' ←'), '</th>', sep = '')
-  for (tm in team_names) {
-    z <- ledger[ledger$Round == rd & ledger$Team == tm, ]
-    cls <- if (!z$Ranked) 'unranked' else if (z$Surplus > 0) 'gain' else if (z$Surplus < 0) 'reach' else 'even'
-    cat(sprintf('<td class="%s"><span class="pick-meta">#%d · %s</span><span class="player-name">%s</span>%s</td>',
-                cls, z$PickNumber, esc(z$Position), esc(z$Player),
-                if (z$Ranked) paste0('Rank ', z$Rank, ' · ', signed(z$Surplus, 0)) else 'Unranked'))
-  }
-  cat('</tr>')
-}
-cat('</tbody></table></div>')
-```
-
-## Each team has a different pattern
-
-The team tables include all 16 selections. The opening figures use offensive picks so they agree with the main comparison. “Best” and “largest reach” refer to ranked offensive picks; unranked players are disclosed separately.
-
-```{r team-details, results='asis'}
-for (tm in teams$Team) {
-  z <- ledger[ledger$Team == tm, ]
-  s <- teams[teams$Team == tm, ]
-  sk <- z[z$Position %in% c("QB", "RB", "WR", "TE"), ]
-  rk <- sk[sk$Ranked, ]
-  best <- rk[which.max(rk$Surplus), ]
-  worst <- rk[which.min(rk$Surplus), ]
-  cat('\n\n### ', tm, '\n\n', sep = '')
-  cat(sprintf('%s averages **%s** places of offensive surplus across %d picks%s. Its %d ranked offensive picks have a median of %s.\n\n',
-              tm, signed(s$MeanFloorSurplus), s$Picks,
-              if (s$Missing) ', using the 301 boundary for its unranked selections' else ', all matched to ESPN',
-              s$Scored, signed(s$MedianRankedSurplus)))
-  cat(sprintf('The largest ranked bargain is **%s** at pick %d versus rank %d (%s). The largest ranked reach is **%s** at pick %d versus rank %d (%s).\n\n',
-              best$Player, best$PickNumber, best$Rank, signed(best$Surplus, 0),
-              worst$Player, worst$PickNumber, worst$Rank, signed(worst$Surplus, 0)))
-  if (tm == "Rome Reigns") cat(sprintf('Rome has positive surplus on %d of its 14 offensive picks. Its largest offensive reach is only %d places, so the positive mean comes from repeated discounts across the draft.\n\n', s$SurplusHits, abs(worst$Surplus)))
-  if (tm == "Purple Rain") cat(sprintf('Purple used three picks on quarterbacks, including Allen and Hurts in the first three rounds. Rounds 10–14 each have positive surplus, adding %d places to the offensive total.\n\n', sum(sk$Surplus[sk$Round >= 10])))
-  if (tm == "Think Tank") cat(sprintf('Think Tank opened with two running backs and waited until round 7 for a quarterback. Stafford, Mahomes, and Garrett Wilson then added %d places of surplus across rounds 10–12.\n\n', sum(sk$Surplus[sk$Round >= 10 & sk$Round <= 12])))
-  if (tm == "Magic Skol Bus") cat(sprintf('Magic has positive surplus on every pick through round 9 and on %d of 14 offensive picks overall. The Pacheco selection contributes %d places by itself, which explains why the mean is negative while the median is positive.\n\n', s$SurplusHits, worst$Surplus))
-  if (tm == "Clint Bilton") cat(sprintf('Burrow and Lawrence came in consecutive rounds and together supplied %d places of surplus. Kraft, Stroud, and Hunter were each taken at least 40 places ahead of their ESPN ranks.\n\n', sum(sk$Surplus[sk$Player %in% c("Joe Burrow", "Trevor Lawrence")])))
-  if (tm == "NKFL") cat('NKFL drafted two quarterbacks by round 5 and two tight ends by round 13. Its three positive offensive gaps are Drake Maye, DeVonta Smith, and David Montgomery; AJ Barner is the largest contributor to the negative mean.\n\n')
-  if (tm == "Flames") cat(sprintf('Harris, Wright, and Kupp together contribute %d places of surplus. Those three selections account for much of the gap, despite positive results on Collins, Hall, Shough, Adams, and Goff.\n\n', sum(sk$Surplus[sk$Player %in% c("Najee Harris", "Jaylen Wright", "Cooper Kupp")])))
-  if (tm == "Fauxgendaz") cat('Bo Nix is the only ranked offensive pick with positive surplus. Beckham and Trevor Etienne leave two offensive ranks unknown; even when they are excluded, Njoku and Bigsby weigh heavily on the remaining average.\n\n')
-  if (any(!z$Ranked)) cat('Unranked selections: ', paste(z$Player[!z$Ranked], collapse = ', '), '. Their actual ESPN ranks remain unknown.\n\n', sep = '')
-  table_html(pick_table(z)[, c('Pick', 'Round', 'Player', 'Pos', 'ESPN rank', 'Surplus')])
-}
-```
-
-## Several highly ranked players were left undrafted
-
-These are the highest-ranked players absent from the completed board after applying the same identity rules. Their availability is inferred from the supplied draft, not checked against a live league roster or later transactions. No same-position replacement or roster fit is assumed.
-
-```{r undrafted, results='asis'}
-u <- head(result$undrafted[order(result$undrafted$Rank), ], 20)
-table_html(data.frame(`ESPN rank` = u$Rank, Player = u$CanonicalPlayer, Pos = u$Position,
-                      `NFL team (source)` = u$NFLTeam, check.names = FALSE))
-```
-
-Travis Etienne Jr. remains on this list because the recorded selection is Trevor Etienne. The source's NFL teams are preserved as published on September 2; they do not affect the identity join or the score.
-
-## The pick ledger is searchable
-
-Search by player, team, position, or match status. Sorting by numeric surplus shows the ranked bargains and reaches. Unranked selections have an empty actual-rank and actual-surplus field; the separate 301 score keeps the convention visible. The CSV download includes positional ranks, source team, aliases, and join explanations.
-
-```{r interactive-ledger}
-display <- data.frame(Pick = ledger$PickNumber, Round = ledger$Round, Team = ledger$Team,
-                      Player = ledger$Player, Pos = ledger$Position,
-                      `ESPN name` = ledger$CanonicalPlayer, `ESPN rank` = ledger$Rank,
-                      Surplus = ledger$Surplus, `Surplus at 301*` = ledger$SurplusFloor,
-                      Status = ledger$MatchStatus, check.names = FALSE)
-DT::datatable(display, rownames = FALSE, escape = TRUE, filter = 'top',
-              caption = '128 picks · actual rank stays empty for unranked players · * boundary score applies only where rank is absent',
-              options = list(pageLength = 16, lengthMenu = c(16, 32, 64, 128), scrollX = TRUE,
-                             order = list(list(0, 'asc')), autoWidth = TRUE,
-                             language = list(search = 'Search all picks:')))
-```
-
-## Reproduce the report from the frozen inputs
-
-The report renders with R Markdown and knitr. Every table, figure, and numeric finding comes from the checked-in draft and the frozen Board Calls snapshot. Rendering does not refresh the rankings, so an ESPN update cannot silently change the results.
-
-- [Draft input CSV](data/draft-board-2026.csv), [Board Calls JSON](data/board-calls-rankings.json), and [rankings CSV](data/espn-superflex-ppr-2026.csv)
-- [Full ledger](data/draft-ledger.csv), [team summary](data/team-summary.csv), [sensitivity results](data/sensitivity.csv), and [join audit](data/join-audit.csv)
-- [Explicit name aliases](data/name-aliases.csv), [provenance](data/provenance.json), and [independent review](REVIEW.md)
-- [R Markdown source](index.Rmd), [analysis code](R/analysis.R), [tests](tests/test-analysis.R), and [render script](render.R)
-
-Run from the repository root:
-
-```bash
-Rscript 2026/Draft/render.R
-```
-
-The build checks all 128 picks, snake order, unique player identities, all 300 source ranks, position consistency, explicit aliases, the five known unranked selections, and independent numerical examples. Unexpected unmatched names or duplicate joins stop the build. The legacy `Rank − Pick` score is available in the ledger as `LegacyScore`; its sign is the opposite of the surplus used here.
-
-<details>
-<summary>R session and package versions</summary>
-
-```{r session, comment=''}
-cat(paste(sub("[[:space:]]+$", "", capture.output(sessionInfo())), collapse = "\n"))
-```
-
-</details>
