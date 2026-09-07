@@ -30,10 +30,10 @@ for (i in seq_len(nrow(d))) {
   check(identical(d$RawLabel[i], board[[d$Team[i]]][d$Round[i]]))
 }
 
-# Every match has explicit provenance; all five absent identities stay missing.
-check(nrow(result$rankings) == 300L && sum(d$Ranked) == 123L)
+# Every match has explicit provenance; all four absent identities stay missing.
+check(nrow(result$rankings) == 300L && sum(d$Ranked) == 124L)
 check(setequal(d$CanonicalPlayer[!d$Ranked],
-               c("Odell Beckham Jr.", "Trevor Etienne", "Tyler Bass", "Bears D/ST", "Vikings D/ST")))
+               c("Odell Beckham Jr.", "Tyler Bass", "Bears D/ST", "Vikings D/ST")))
 check(all(is.na(d$Rank[!d$Ranked])) && all(d$RankFloor[!d$Ranked] == 301L))
 check(all(is.na(d$Surplus[!d$Ranked])))
 check(sum(d$MatchMethod == "alias") == 19L && all(nzchar(d$MatchReason)))
@@ -41,9 +41,10 @@ check(d$CanonicalPlayer[d$Player == "Kenneth Gainwell"] == "Kenny Gainwell")
 check(d$Rank[d$Player == "James Cook"] == 18L)
 check(d$Rank[d$Player == "Kyle Pitts"] == 74L)
 check(d$Position[128] == "DST" && d$RawLabel[128] == "DEF - Chicago Bears")
-check(is.na(d$Rank[d$Player == "Trevor Etienne"]))
-check(result$undrafted$Rank[result$undrafted$CanonicalPlayer == "Travis Etienne Jr."] == 45L)
-check(nrow(result$undrafted) == 177L)
+check(d$Player[84] == "Travis Etienne Jr." && d$Rank[84] == 45L && d$Surplus[84] == 39L)
+check(!any(d$Player == "Trevor Etienne"))
+check(!"Travis Etienne Jr." %in% result$undrafted$CanonicalPlayer)
+check(nrow(result$undrafted) == 176L)
 check(!any(identity_key(result$undrafted$Position, result$undrafted$CanonicalPlayer) %in%
            identity_key(d$Position, d$CanonicalPlayer)))
 
@@ -56,17 +57,17 @@ check(d$SurplusFloor[77] == -224L)
 check(d$LegacyScore[77] == 224L)
 check(all(d$Surplus[d$Ranked] == d$PickNumber[d$Ranked] - d$Rank[d$Ranked]))
 check(all(d$LegacyScore == -d$SurplusFloor))
-check(sum(result$teams$Picks) == 112L && sum(result$teams$Scored) == 110L && sum(result$teams$Missing) == 2L)
+check(sum(result$teams$Picks) == 112L && sum(result$teams$Scored) == 111L && sum(result$teams$Missing) == 1L)
 check(all(result$teams$Picks == 14L) && all(result$all_teams$Picks == 16L))
-check(sum(result$all_teams$Scored) == 123L && sum(result$all_teams$Missing) == 5L)
-# Independently audited raw-PDF expectations supplied by the source reviewer.
+check(sum(result$all_teams$Scored) == 124L && sum(result$all_teams$Missing) == 4L)
+# Independent totals, with Fauxgendaz increased by 301 - 45 = 256 for the Etienne correction.
 check(identical(result$teams$Team, c("Rome Reigns", "Purple Rain", "Think Tank", "Magic Skol Bus",
-                                  "Clint Bilton", "NKFL", "Flames", "Fauxgendaz")))
-check(isTRUE(all.equal(result$teams$TotalFloorSurplus, c(167, 73, 39, -97, -165, -436, -696, -943))))
+                                  "Clint Bilton", "NKFL", "Fauxgendaz", "Flames")))
+check(isTRUE(all.equal(result$teams$TotalFloorSurplus, c(167, 73, 39, -97, -165, -436, -687, -696))))
 check(isTRUE(all.equal(result$all_teams$MeanFloorSurplus[1:3], c(-2.5, -4.625, -5.125))))
 faux <- result$teams[result$teams$Team == "Fauxgendaz", ]
 faux_ranked <- d$Surplus[d$Team == "Fauxgendaz" & d$Position %in% skill_positions & d$Ranked]
-check(faux$Scored == 12L && faux$Missing == 2L && faux$MeanRankedSurplus == mean(faux_ranked))
+check(faux$Scored == 13L && faux$Missing == 1L && faux$MeanRankedSurplus == mean(faux_ranked))
 check(faux$MedianRankedSurplus == median(faux_ranked))
 check(all(result$teams$SurplusHits + result$teams$EvenPicks + result$teams$NegativePicks == result$teams$Scored))
 check(all(rowSums(result$positions[draft_positions]) == 16L))
@@ -75,7 +76,7 @@ s <- result$sensitivity
 check(nrow(s) == 80L && all(table(s$Scope, s$Scenario) == 8L))
 faux301 <- s$MeanSurplus[s$Scope == "Skill" & s$Team == "Fauxgendaz" & s$Scenario == "Floor 301"]
 faux400 <- s$MeanSurplus[s$Scope == "Skill" & s$Team == "Fauxgendaz" & s$Scenario == "Floor 400"]
-check(abs((faux301 - faux400) - 198 / 14) < 1e-12)
+check(abs((faux301 - faux400) - 99 / 14) < 1e-12)
 check(s$MeanSurplus[s$Scope == "Skill" & s$Team == "Fauxgendaz" & s$Scenario == "Ranked only"] == faux$MeanRankedSurplus)
 
 # Fail closed on malformed input and join mistakes instead of hiding losses.
@@ -102,7 +103,7 @@ bad <- board
 bad[1, "Think Tank"] <- "TE - James Cook"
 expect_error(build_analysis(bad, ranking_source, aliases), "position mismatch")
 bad <- board
-bad[11, "Fauxgendaz"] <- "WR - Trevor Etienne"
+bad[11, "Fauxgendaz"] <- "WR - Travis Etienne Jr."
 expect_error(build_analysis(bad, ranking_source, aliases), "position mismatch")
 bad <- board
 bad[3, "Flames"] <- bad[1, "Flames"]
@@ -141,6 +142,24 @@ out <- tempfile("draft-analysis-test-")
 dir.create(file.path(out, "data"), recursive = TRUE)
 export_analysis(result, out)
 roundtrip <- read.csv(file.path(out, "data", "draft-ledger.csv"), stringsAsFactors = FALSE)
-check(nrow(roundtrip) == 128L && sum(is.na(roundtrip$Rank)) == 5L)
+check(nrow(roundtrip) == 128L && sum(is.na(roundtrip$Rank)) == 4L)
 check(identical(roundtrip$RawLabel, d$RawLabel))
-cat(sprintf("PASS: %d analysis assertions; 128 picks, 123 ranked, 5 explicitly unranked, 19 aliases.\n", checks))
+
+# The original page consumes these exports and must compute the same scores.
+legacy_draft <- read.csv(file.path(out, "data", "Draft2026.csv"), stringsAsFactors = FALSE)
+legacy_ranks <- read.csv(file.path(out, "data", "espn_superflex_ppr_2026.csv"), stringsAsFactors = FALSE)
+legacy_rank <- legacy_ranks$Rank[match(legacy_draft$Player, legacy_ranks$Player)]
+check(sum(is.na(legacy_rank)) == 4L)
+legacy_rank[is.na(legacy_rank)] <- 301L
+check(identical(legacy_draft$OverallPick, d$PickNumber))
+check(all(legacy_rank - legacy_draft$OverallPick == d$LegacyScore))
+check(legacy_draft$Player[84] == "Travis Etienne Jr." && legacy_rank[84] == 45L)
+
+# The requested page preserves exactly the prior five ggplot expressions.
+prior_report <- readLines("../../2025/Draft/index.Rmd", warn = FALSE)
+current_report <- readLines("index.Rmd", warn = FALSE)
+prior_plots <- prior_report[grepl("^ggplot\\(", prior_report)]
+current_plots <- current_report[grepl("^ggplot\\(", current_report)]
+check(length(current_plots) == 5L && identical(current_plots, prior_plots))
+check(!any(grepl("report.css|toc_float|theme_set|geom_col|metric-strip", current_report)))
+cat(sprintf("PASS: %d analysis assertions; 128 picks, 124 ranked, 4 explicitly unranked, 19 aliases.\n", checks))

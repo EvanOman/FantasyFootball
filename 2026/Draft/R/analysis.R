@@ -16,14 +16,13 @@ identity_key <- function(position, player) paste(position, player, sep = "|")
 
 unranked_allowlist <- function() {
   data.frame(
-    Position = c("WR", "RB", "K", "DST", "DST"),
+    Position = c("WR", "K", "DST", "DST"),
     CanonicalPlayer = c(
-      "Odell Beckham Jr.", "Trevor Etienne", "Tyler Bass",
+      "Odell Beckham Jr.", "Tyler Bass",
       "Bears D/ST", "Vikings D/ST"
     ),
     Reason = c(
       "User-confirmed Fauxgendaz round-10 selection; absent from this source Top 300.",
-      "Trevor Etienne is the supplied player and is absent from this source Top 300; Travis Etienne Jr. is a different player.",
       "Supplied kicker is absent from this source Top 300.",
       "Chicago defensive unit is absent from this source Top 300.",
       "Minnesota defensive unit is absent from this source Top 300."
@@ -263,7 +262,20 @@ analyze_draft <- function(path = ".") {
 }
 
 export_analysis <- function(result, path = ".") {
+  # The original knitr page expects these two column layouts and exact names.
+  draft_legacy <- data.frame(
+    OverallPick = result$ledger$PickNumber, Round = result$ledger$Round,
+    PickInRound = result$ledger$PickInRound, Player = result$ledger$CanonicalPlayer,
+    NFLTeam = result$ledger$NFLTeam, Position = result$ledger$Position,
+    FantasyTeam = result$ledger$Team, stringsAsFactors = FALSE
+  )
+  rankings_legacy <- data.frame(
+    Rank = result$rankings$Rank, Player = result$rankings$CanonicalPlayer,
+    Pos = result$rankings$Position, stringsAsFactors = FALSE
+  )
   exports <- list(
+    "Draft2026.csv" = draft_legacy,
+    "espn_superflex_ppr_2026.csv" = rankings_legacy,
     "draft-ledger.csv" = result$ledger,
     "team-summary.csv" = result$teams,
     "all-position-team-summary.csv" = result$all_teams,

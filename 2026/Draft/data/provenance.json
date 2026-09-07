@@ -4,7 +4,10 @@
     "teams": 8,
     "rounds": 16,
     "order": "Snake; columns are the first-round order, confirmed by Evan",
-    "correction": "Evan supplied Odell Beckham Jr. for Fauxgendaz round 10, overall pick 77",
+    "corrections": [
+      "Evan supplied Odell Beckham Jr. for Fauxgendaz round 10, overall pick 77",
+      "Fauxgendaz round 11, overall pick 84, is treated as Travis Etienne Jr. based on Evan's recollection that the higher-value Etienne was drafted. ESPN ranks Travis 45th; Trevor is absent from the Top 300. There is only one Etienne entry in the supplied board. This correction is based on Evan's recollection, not an independent league draft export."
+    ],
     "file": "draft-board-2026.csv"
   },
   "rankings": {
