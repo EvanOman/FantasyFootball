@@ -39,6 +39,8 @@ The R export uses the original report's audited joins without rewriting that rep
 
 The model tests include an independent exhaustive-subset optimizer for all eight teams, two formats, and two metrics. Scenario tests cover starter exclusions, byes, partial rosters, empty slots, and the actual available board at every pick. A SHA-256 guard proves the original knitr HTML is unchanged.
 
+The exported-scenario tests independently sum the selected players, check roster ownership, and verify bye and availability exclusions. After opening the locally served report in an `agent-browser` session, run `agent-browser --session draft-grades eval --stdin < tests/browser-audit.js` from this directory at desktop and mobile widths. This compares all eight scoreboard rows and all 80 displayed lineup rows to the export, checks chart titles and internal links, and detects page-level overflow. It does not validate the unfinished Draft Lab.
+
 Current stage: the report is drafted and rendered locally. The analysis export already contains 129 replay states and the lineup/absence sensitivities. The Draft Lab is an explicit unfinished placeholder pending its design checkpoint; do not publish or mark the overall task complete yet.
 
 Editorial pass: team assessments were revised using the prose runbook and writing-coach principles. The prose uses zero rhetorical em dashes; the dash in unavailable numeric table cells is a data marker. Letter grades are editorial opinions, model scores are labeled relative, and dated injury reports are not translated into invented medical probabilities.

@@ -52,6 +52,45 @@ test('Rank placeholders, absent projections, and uncertainty are disclosed', () 
     '60%', '20%', '80/10/10', '40/40/20', '35/15/50', 'six from 60-plus']) assert(html.includes(text), text);
   assert.equal(result.players.filter(p => ['K', 'DST'].includes(p.position) && p.points === null).length, 16);
 });
+test('Every exported lineup total reconciles to its actual selected player IDs', () => {
+  const players = new Map([...result.players, ...Object.values(result.wire).flat()].map(p => [p.id, p]));
+  const check = (lineup, team, metric = 'points', allowedFreeId = null) => {
+    const selected = lineup.slots.filter(s => s.id !== null).map(s => {
+      const player = players.get(s.id);
+      assert(player, `Unknown player ${s.id}`);
+      assert(player.team === team || player.id === allowedFreeId, `Wrong roster: ${s.id}`);
+      assert(['QB', 'RB', 'WR', 'TE'].includes(player.position));
+      return player;
+    });
+    const sum = selected.reduce((total, player) => total + (player[metric] ?? 0), 0);
+    assert.equal(lineup.total, sum, `${team} ${metric} total`);
+    assert.equal(lineup.perGame, sum / 17, `${team} ${metric} equivalent`);
+    assert.equal(lineup.emptySlots, lineup.slots.filter(s => s.id === null).length);
+    const starters = new Set(selected.map(p => p.id));
+    assert.equal(starters.size, selected.length);
+    assert(lineup.bench.every(id => !starters.has(id)), 'Starter also appears on bench');
+  };
+  for (const rows of Object.values(result.formats)) for (const row of rows) {
+    check(row.baseline, row.team);
+    check(row.salaryLineup, row.team, 'salary');
+    check(row.flaggedOut, row.team);
+    for (const lineup of Object.values(row.byes)) check(lineup, row.team);
+    for (const lineup of Object.values(row.absences)) {
+      check(lineup, row.team);
+      check(lineup.wire, row.team, 'points', lineup.wire.candidate.id);
+    }
+  }
+});
+test('Bye and current-unavailability scenarios exclude the documented players', () => {
+  const players = new Map(result.players.map(p => [p.id, p]));
+  const unavailable = new Set(availability.filter(a => a.kind === 'Unavailable').map(a => a.name));
+  for (const rows of Object.values(result.formats)) for (const row of rows) {
+    assert(row.flaggedOut.slots.every(s => s.id === null || !unavailable.has(players.get(s.id).name)));
+    for (const [week, lineup] of Object.entries(row.byes)) {
+      assert(lineup.slots.every(s => s.id === null || players.get(s.id).bye !== Number(week)));
+    }
+  }
+});
 test('Writing pass has no stock openers or rhetorical em dashes', () => {
   const prose = Object.values(teams).flatMap(t => [t.headline, ...t.paragraphs, t.action]).join('\n');
   assert(!prose.includes('—'));
