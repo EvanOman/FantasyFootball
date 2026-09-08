@@ -13,11 +13,15 @@ This is a separate report. `../Draft/` remains the original knitr page and must 
 - Injury/availability facts require dated sources. Uniform starter-out scenarios measure resilience, not the probability that a player gets hurt. Do not double-discount known missed games already present in Clay's totals.
 - K and D/ST belong in every displayed full lineup. The projection guide has no comparable published PPR point totals for those positions, so offensive comparison totals explicitly exclude them. Their ESPN position ranks are assessed separately.
 
-## Draft Lab design checkpoint
+## Draft Lab
 
-Proposed intuitions: a bargain can sit on the bench; RB1/RB2 and superflex slots change the value of depth; a roster's response to an absence matters separately from injury probability. Contrast each view with the old average rank-difference result.
+Evan requested a scrub-able draft history, lineup comparisons, and an Elo-style head-to-head angle, with other choices delegated. All player-performance inputs remain published ESPN projections or rankings. No new player-performance model is fitted.
 
-Proposed persistent state: the complete snake board, selected roster, and comparison metrics. Operations: scrub/step/replay picks, select teams, change lineup format, remove a starter, and reset. Animate the current pick and its resulting changes only. These targets and the state/operation inventory were sent to Evan for confirmation; the Draft Lab UI is gated pending his response.
+The complete snake board keeps managers in fixed columns and marks the reverse order in even rounds. Scrub all 129 states, jump rounds, click a pick, play/pause in eight-pick increments, highlight positions including K/D/ST, and follow a roster with its cumulative lineup curve. No animation is needed to use the page.
+
+The matchup desk compares any two legal lineups, including specialists, and shows all 56 ordered head-to-head projection gaps. The common controls cover 2-WR/3-WR formats, individual absences, every bye week, documented unavailable players, and an optimistic one-pickup sensitivity. Pickup scenarios are independent; the same free agent can appear on more than one hypothetical roster. The weighting view contrasts all four score presets with the unchanged legacy metric.
+
+The Elo-style power scale is `1500 + 400 * log10(P / G)`, where `P` is a legal lineup's published point total and `G` is the baseline cohort's geometric mean. The reference stays fixed within a format when scenarios change. It is a transparent display transform, not an outcome-trained Elo model. Its logistic share is exactly `P1 / (P1 + P2)`, **not a fantasy win probability**. No weekly variance, injury probabilities, correlations, or new player forecasts are invented. The US Chess standard expectancy formula is linked as mathematical background, not an endorsement of this fantasy application.
 
 Presentation direction: a sports annual with cream paper, dark ink, red editorial accents, large serif headlines, and compact data graphics. No frontend framework or package install is needed. A standalone tested analysis module owns the calculations; browser event handlers only select inputs and render results. Static hosting on the existing GitHub Pages site is retained.
 
@@ -39,8 +43,15 @@ The R export uses the original report's audited joins without rewriting that rep
 
 The model tests include an independent exhaustive-subset optimizer for all eight teams, two formats, and two metrics. Scenario tests cover starter exclusions, byes, partial rosters, empty slots, and the actual available board at every pick. A SHA-256 guard proves the original knitr HTML is unchanged.
 
-The exported-scenario tests independently sum the selected players, check roster ownership, and verify bye and availability exclusions. After opening the locally served report in an `agent-browser` session, run `agent-browser --session draft-grades eval --stdin < tests/browser-audit.js` from this directory at desktop and mobile widths. This compares all eight scoreboard rows and all 80 displayed lineup rows to the export, checks chart titles and internal links, and detects page-level overflow. It does not validate the unfinished Draft Lab.
+The exported-scenario tests independently sum the selected players, check roster ownership, and verify bye and availability exclusions. After opening the locally served report in an `agent-browser` session, run these at desktop and mobile widths:
 
-Current stage: the report is drafted and rendered locally. The analysis export already contains 129 replay states and the lineup/absence sensitivities. The Draft Lab is an explicit unfinished placeholder pending its design checkpoint; do not publish or mark the overall task complete yet.
+```sh
+agent-browser --session draft-grades eval --stdin < tests/browser-audit.js
+agent-browser --session draft-grades eval --stdin < tests/browser-lab-audit.js
+```
 
-Editorial pass: team assessments were revised using the prose runbook and writing-coach principles. The prose uses zero rhetorical em dashes; the dash in unavailable numeric table cells is a data marker. Letter grades are editorial opinions, model scores are labeled relative, and dated injury reports are not translated into invented medical probabilities.
+The report audit compares all eight scoreboard rows and all 80 displayed lineup rows to the export. The Lab audit exercises every control, all 129 scrub states, and 216 displayed lineups across formats and scenarios, including every bye week. It checks keyboard tab focus, source navigation, resets, and page overflow. Browser interactions supplement the independent exhaustive optimizer and power-scale model tests; a screenshot alone does not establish arithmetic correctness.
+
+Deployment target: `https://evanoman.github.io/FantasyFootball/2026/Report/`. Publish through a normal pull request into `gh-pages`, then verify the live artifact and interactions. The original `2026/Draft/` content must remain byte-identical.
+
+Editorial pass: team assessments and Lab explanations were revised using Evan's prose guidance. Letter grades are editorial opinions, model scores are labeled relative, and dated injury reports are not translated into invented medical probabilities. The report identifies its analysis as AI-written.

@@ -50,5 +50,5 @@
   }
   if (document.documentElement.scrollWidth > innerWidth + 1) throw new Error('Page overflows viewport');
   return { passed: true, teams: scoreRows.length, lineupRows, charts: charts.length,
-    viewport: `${innerWidth}×${innerHeight}`, scope: 'Static report; Draft Lab is not yet implemented' };
+    viewport: `${innerWidth}×${innerHeight}`, scope: 'Static report; interactive checks are in browser-lab-audit.js' };
 })();
