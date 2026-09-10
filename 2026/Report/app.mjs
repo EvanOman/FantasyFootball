@@ -1,4 +1,5 @@
 import { matchupRows, headToHead, replayView, gradeView } from './lab-model.mjs';
+import { startValueLab } from './value-app.mjs';
 
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -6,7 +7,7 @@ const n = value => Number(value).toFixed(1);
 const signed = value => `${value > 0 ? '+' : ''}${n(value)}`;
 const short = name => name.replace(/ (Jr\.|Sr\.|III)$/, '');
 const tier = p => p.positionRank ? `${p.position === 'DST' ? 'D/ST' : p.position}${p.positionRank}` : 'Unranked';
-const labIds = new Set(['lab','replay','matchups','sensitivity']);
+const labIds = new Set(['lab','replay','matchups','sensitivity','value-lab']);
 let stopPlayback = () => {};
 
 function showTab() {
@@ -182,7 +183,7 @@ async function startLab() {
   function renderGrades() {
     const rows=gradeView(data,state.format,state.preset);
     $('#grade-note').textContent=`${state.format==='standard'?'Confirmed 2-WR':'Three-WR sensitivity'} format; baseline rosters. These draft grades do not change with the matchup desk’s absence or bye controls.`;
-    $('#grade-comparison').innerHTML=`<table class="grade-comparison"><caption>Current emphasis versus the legacy score</caption><thead><tr><th>Team</th><th>Index & place</th><th>Old rank gap & place</th><th>ESPN value surplus</th><th>Best lineup salary value</th></tr></thead><tbody>${rows.map(row=>`<tr><th>${esc(row.team)} <small>${row.grade}</small></th><td><div class="index-bar"><i style="width:${row.score}%"></i></div>${n(row.score)} · #${row.place}</td><td>${n(row.rankDiff)} · #${row.oldPlace}</td><td>${signed(row.valueSurplus)}</td><td>${row.starterSalary}</td></tr>`).join('')}</tbody></table>`;
+    $('#grade-comparison').innerHTML=`<table class="grade-comparison"><caption>Current emphasis versus the legacy score</caption><thead><tr><th>Team</th><th>Index & place</th><th>Old rank gap & place</th><th>ESPN value surplus</th><th>Best lineup salary value</th><th>Historical curve surplus</th></tr></thead><tbody>${rows.map(row=>`<tr><th>${esc(row.team)} <small>${row.grade}</small></th><td><div class="index-bar"><i style="width:${row.score}%"></i></div>${n(row.score)} · #${row.place}</td><td>${n(row.rankDiff)} · #${row.oldPlace}</td><td>${signed(row.valueSurplus)}</td><td>${row.starterSalary}</td><td>${signed(row.curveSurplus)}</td></tr>`).join('')}</tbody></table>`;
   }
   function selectTeams(side,value) {
     const other=side==='a'?'b':'a';
@@ -215,6 +216,11 @@ async function startLab() {
   renderReplay(); renderMatchups();
   $('#lab-loading').hidden=true;$('#lab-content').hidden=false;
   document.documentElement.dataset.labReady='true';
+  startValueLab(data).catch(error => {
+    $('#value-loading').textContent = `${error.message} Reload to retry. The written findings and other Lab views remain available.`;
+    $('#value-loading').setAttribute('role','alert');
+    console.error(error);
+  });
   if (labIds.has(location.hash.slice(1))) showTab();
 }
 startLab().catch(error=>{

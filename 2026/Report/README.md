@@ -19,7 +19,7 @@ Evan requested a scrub-able draft history, lineup comparisons, and an Elo-style 
 
 The complete snake board keeps managers in fixed columns and marks the reverse order in even rounds. Scrub all 129 states, jump rounds, click a pick, play/pause in eight-pick increments, highlight positions including K/D/ST, and follow a roster with its cumulative lineup curve. No animation is needed to use the page.
 
-The matchup desk compares any two legal lineups, including specialists, and shows all 56 ordered head-to-head projection gaps. The common controls cover 2-WR/3-WR formats, individual absences, every bye week, documented unavailable players, and an optimistic one-pickup sensitivity. Pickup scenarios are independent; the same free agent can appear on more than one hypothetical roster. The weighting view contrasts all four score presets with the unchanged legacy metric.
+The matchup desk compares any two legal lineups, including specialists, and shows all 56 ordered head-to-head projection gaps. The common controls cover 2-WR/3-WR formats, individual absences, every bye week, documented unavailable players, and an optimistic one-pickup sensitivity. Pickup scenarios are independent; the same free agent can appear on more than one hypothetical roster. The weighting view contrasts six score presets with the unchanged legacy metric.
 
 The Elo-style power scale is `1500 + 400 * log10(P / G)`, where `P` is a legal lineup's published point total and `G` is the baseline cohort's geometric mean. The reference stays fixed within a format when scenarios change. It is a transparent display transform, not an outcome-trained Elo model. Its logistic share is exactly `P1 / (P1 + P2)`, **not a fantasy win probability**. No weekly variance, injury probabilities, correlations, or new player forecasts are invented. The US Chess standard expectancy formula is linked as mathematical background, not an endorsement of this fantasy application.
 
@@ -55,3 +55,33 @@ The report audit compares all eight scoreboard rows and all 80 displayed lineup 
 Deployment target: `https://evanoman.github.io/FantasyFootball/2026/Report/`. Publish through a normal pull request into `gh-pages`, then verify the live artifact and interactions. The original `2026/Draft/` content must remain byte-identical.
 
 Editorial pass: team assessments and Lab explanations were revised using Evan's prose guidance. Letter grades are editorial opinions, model scores are labeled relative, and dated injury reports are not translated into invented medical probabilities. The report identifies its analysis as AI-written.
+
+## Historical diminishing-returns lens (September 10 UTC update)
+
+The user requested a ten-season test of value concentration and a rank-to-value metric incorporated into scoring. This extension preserves the original knitr report and the existing points/lineup model. It does not fit individual player-performance forecasts.
+
+Inputs, frozen in `data/history.json` with 40 source URLs and SHA-256 hashes:
+
+- nflverse `stats_player_reg_YEAR.csv`, 2016–2025, using the published `fantasy_points_ppr` field. Full regular seasons include the final NFL week and exclude playoffs.
+- nflverse annual rosters for season-specific positions. Current-career labels in the results files can be misleading (for example, early Jordan Matthews seasons). GSIS identities join the sources. Travis Hunter's offensive points use WR, supported by Jacksonville's [WR/DB designation](https://www.jaguars.com/news/k000227-travis-hunter-undergoes-successful-knee-surgery), despite the statistics file's CB label.
+- [Fantasy Football Calculator](https://help.fantasyfootballcalculator.com/article/42-adp-rest-api), 12-team preseason two-QB and one-QB PPR mock ADP. Each sample includes its first 140 offensive players, ordered by ADP, with decimal ADP and the source date window retained. The two-QB API does not establish historical reception scoring. Neither price history is an exact eight-team ESPN PPR superflex board. Both are evaluated against the same realized full-PPR outcomes.
+
+All 2,800 player-season/ADP-format observations are matched. Zero-production selections remain in the sample: a known GSIS identity with no regular-season results row receives zero, never an unresolved name. Name aliases, position corrections, and zero-result matches are audited. Historical API team/bye fields are ignored because they can describe the player's current team. Dates and draft counts remain in each year's metadata.
+
+Replacement pools all eight teams' mandatory QB/2RB/2WR/TE slots, eight FLEX, and eight SUPERFLEX slots. An exact position-count optimizer selects 64 offensive starters (72 with three WR); replacement is the next unselected player at each position. Positive value is `max(0, PPR total − position replacement total) / scheduled games`, using 16 games through 2020 and 17 thereafter. This measures full-season production above a static starter baseline, with injury absences included. It is not weekly streaming value, a bench-depth waiver baseline, or literal fantasy points a roster can score simultaneously.
+
+Ten-player preseason bands show raw mean total PPR points and positive replacement value, plus the observed range of season means (not a confidence interval). Each season has equal weight. Weighted pool-adjacent-violators provides a nonincreasing least-squares fit of the band means; linear interpolation between band centers supplies curve credits. The first band is flat before its center. Known ranks beyond 140 keep the last observed band value, avoiding a fabricated cutoff; unranked players receive zero credit. K/D/ST are excluded from this offensive model and remain displayed and assessed separately elsewhere.
+
+For 2026, a pick's curve surplus is `credit(ESPN rank) − credit(actual pick)`. Sum across offensive draft picks to measure acquisition quality. Bench assets count as acquired assets, not simultaneous starters. The primary index now uses percentiles weighted 60% starting points, 20% coverage, 10% ESPN auction surplus, and 10% curve surplus. The original 20% value budget is split between related signals rather than doubled. `withHistoricalScores` enriches the rows without changing the existing `summarize` contract; the exact previous index remains the `espn` preset. The `history` preset uses 60/20/0/20. The history panel's sample controls are sensitivity experiments and do not rewrite the fixed-reference published grades.
+
+Findings: the eventual top 30/40 account for 79.4%/89.9% of positive value on average, while the preseason two-QB top 40 captures 58.8%. Preseason top-ten positive value averages 4.6 versus 2.3 at ranks 31–40; the top ten beat the next ten in seven of ten seasons. Observed reversals remain visible. Magic leads ten-year curve surplus (+6.2), narrowly ahead of Rome (+5.7); 2016–2020 favors Rome while 2021–2025 favors Magic. Rome remains first on the combined index. Think Tank moves above Clint from their previous index tie. All editorial letters remain unchanged, with a historical-value paragraph added to every assessment.
+
+Reimport using `node import-history.mjs /path/to/dedicated/cache`, then rebuild. Downloads are cached. An existing manifest rejects changed bytes or URLs; refreshing a source requires explicit review and updating its manifest. Normal builds are offline and use committed extracts. `data/value-analysis.json` contains both format calculations, per-season replacement lines, final value/position ranks, matched preseason picks, and curve bands.
+
+The value tests cover source coverage, zero seasons, historical positions, interpolation, weighted smoothing, independent pooled-slot optimization, concentration arithmetic, immutable old scoring behavior, all new weights, and reproducible exports. After the browser reports `data-value-ready=true`, also run:
+
+```sh
+agent-browser --session draft-value eval --stdin < tests/browser-value-audit.js
+```
+
+This checks all 52 combinations of ADP source, sample and lineup format; all 14 bands; both chart measures; four cutoffs; and every one of the 128 pick rows, including excluded specialists. Run all three browser audits at desktop and mobile widths, locally and after deployment.
