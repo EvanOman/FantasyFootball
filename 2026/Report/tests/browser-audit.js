@@ -43,12 +43,13 @@
     if (!document.getElementById(anchor.hash.slice(1))) throw new Error(`Broken anchor: ${anchor.hash}`);
   }
   const charts = [...document.querySelectorAll('#report svg[role="img"]')];
-  equal(charts.length, 2, 'Desktop and mobile renderings of the single value curve');
+  equal(charts.length, 4, 'Two responsive curve renderings and two supporting evidence charts');
   for (const chart of charts) {
-    const title = document.getElementById(chart.getAttribute('aria-labelledby'));
-    if (!title?.textContent.trim()) throw new Error('Chart is missing an accessible title');
+    for(const id of chart.getAttribute('aria-labelledby').split(' ')) {
+      if (!document.getElementById(id)?.textContent.trim()) throw new Error('Chart is missing an accessible title or description');
+    }
   }
   if (document.documentElement.scrollWidth > innerWidth + 1) throw new Error('Page overflows viewport');
   return { passed: true, teams: scoreRows.length, lineupRows, charts: charts.length,
-    viewport: `${innerWidth}×${innerHeight}`, scope: 'Static report; interactive checks are in browser-lab-audit.js' };
+    viewport: `${innerWidth}×${innerHeight}`, scope: 'Static report; interactive checks are in the ownership and replay audits' };
 })();

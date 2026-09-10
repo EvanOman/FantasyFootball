@@ -1,4 +1,4 @@
-# 2026 draft grades and Draft Lab
+# 2026 draft grades and replay
 
 Purpose: show the historical drop in value by draft rank, compare each manager's share of highly ranked players, and explain the eight team grades.
 
@@ -13,19 +13,17 @@ This is a separate report. `../Draft/` remains the original knitr page and must 
 - Injury/availability facts require dated sources. Uniform starter-out scenarios measure resilience, not the probability that a player gets hurt. Do not double-discount known missed games already present in Clay's totals.
 - K and D/ST belong in every displayed full lineup. The projection guide has no comparable published PPR point totals for those positions, so offensive comparison totals explicitly exclude them. Their ESPN position ranks are assessed separately.
 
-## Draft Lab
+## Report and replay
 
-Evan requested a scrub-able draft history, lineup comparisons, and an Elo-style head-to-head angle, with other choices delegated. All player-performance inputs remain published ESPN projections or rankings. No new player-performance model is fitted.
+The report opens with eight collapsed team scorecards. Each summary shows the team and grade; opening it reveals the unchanged assessment, score statistics, and expandable roster/availability notes. Deep links open the relevant scorecard automatically.
 
-The complete snake board keeps managers in fixed columns and marks the reverse order in even rounds. Scrub all 129 states, jump rounds, click a pick, play/pause in eight-pick increments, highlight positions including K/D/ST, and follow a roster with its cumulative lineup curve. No animation is needed to use the page.
+The second section briefly introduces Evan's top-30/top-40 concentration hypothesis. Three visualizations use the frozen historical calculations: the rank-to-value curve, annual value shares for the preseason top 30 and 40, and a comparison of preseason selections with eventual top performers. All use positive points above the same replacement baseline. The final comparison explicitly requires hindsight. These descriptive findings do not establish a strongest predictor of fantasy-team outcomes.
 
-The matchup desk compares any two legal lineups, including specialists, and shows all 56 ordered head-to-head projection gaps. The common controls cover 2-WR/3-WR formats, individual absences, every bye week, documented unavailable players, and an optimistic one-pickup sensitivity. Pickup scenarios are independent; the same free agent can appear on more than one hypothetical roster. The weighting view contrasts six score presets with the unchanged legacy metric.
+The ownership chart then compares all eight teams' shares of the ESPN top 10, 20, 30, or 40. It defaults to top 30 with no selected team. All bars have the same color and a common zero-based 0–30% scale; data determine their descending order, with draft order breaking display ties. The denominator is the full cutoff, not just drafted players, and the groups are cumulative. A team selection opens its player list, and clearing it restores the neutral view. Magic has 2/5/8/8 players: shared leads at 10 and 40, outright leads at 20 and 30.
 
-The Elo-style power scale is `1500 + 400 * log10(P / G)`, where `P` is a legal lineup's published point total and `G` is the baseline cohort's geometric mean. The reference stays fixed within a format when scenarios change. It is a transparent display transform, not an outcome-trained Elo model. Its logistic share is exactly `P1 / (P1 + P2)`, **not a fantasy win probability**. No weekly variance, injury probabilities, correlations, or new player forecasts are invented. The US Chess standard expectancy formula is linked as mathematical background, not an endorsement of this fantasy application.
+The separate Draft replay tab contains only the scrubber, round jumps, playback, snake board, position/team highlighting, and the roster at the selected pick. It supports all 129 draft states and K/D/ST. Team following starts at the first draft column. Leaving the tab pauses playback.
 
-Presentation direction: cream paper, dark ink, red accents, plain section titles, and compact data graphics. The report runs from the historical value curve to cumulative top-player shares, then the team scorecards. Full lineups, availability notes, the score comparison, and calculation details are collapsed. Draft Lab remains a separate tab. No frontend framework or package install is needed. Tested analysis modules own the calculations; browser event handlers only select inputs and render results. Static hosting on the existing GitHub Pages site is retained.
-
-The ownership chart uses the frozen ESPN ranking to show each team's share of the top 10, 20, 30, and 40. The denominator is the full cutoff, not just drafted players, and the groups are cumulative. Magic's counts are 2/5/8/8: shared leads at 10 and 40, outright leads at 20 and 30. Highlighting another team changes the bars and player list, not the published takeaways or scores. The report-flow rewrite preserves both numerical exports byte-for-byte.
+Presentation direction: cream paper, dark ink, red grade accents, plain section titles, and compact data graphics. No frontend framework or package install is needed. Published projections, grades, the original knitr report, and both calculation exports remain byte-identical through this presentation update. The downloadable scenario calculations and their pure-model tests remain available for reproducibility.
 
 ## Source import
 
@@ -50,14 +48,14 @@ The exported-scenario tests independently sum the selected players, check roster
 ```sh
 agent-browser --session draft-grades eval --stdin < tests/browser-audit.js
 agent-browser --session draft-grades eval --stdin < tests/browser-ownership-audit.js
-agent-browser --session draft-grades eval --stdin < tests/browser-lab-audit.js
+agent-browser --session draft-grades eval --stdin < tests/browser-replay-audit.js
 ```
 
-The report audit compares all eight scoreboard rows and all 80 roster-lineup rows to the export. The ownership audit checks all 32 team/cutoff combinations, counts, percentages, rendered segment widths, ties, player identities, retained keyboard focus, and all eight expandable rosters. It also checks that one responsive curve is visible and that links open collapsed source details. The Lab audit exercises every control, all 129 scrub states, and 216 displayed lineups across formats and scenarios, including every bye week. It checks keyboard tab focus, source navigation, resets, and page overflow. Browser interactions supplement the independent exhaustive optimizer and power-scale model tests; a screenshot alone does not establish arithmetic correctness.
+The report audit compares all eight scoreboard rows and 80 roster-lineup rows to the export. The ownership audit checks all 32 team/cutoff combinations, rendered bar widths, ties, exact player lists, uniform colors, neutral defaults, keyboard focus, all eight collapsed scorecards, nested rosters, and deep links. It reconciles all 28 points in the two new evidence charts to the frozen calculations. The replay audit checks all 129 scrub states, confirmed picks, round jumps, playback/pause/end, all teams and positions, keyboard tabs, source navigation, and absence of retired controls. Run all three audits at desktop and mobile widths, locally and after deployment.
 
 Deployment target: `https://evanoman.github.io/FantasyFootball/2026/Report/`. Publish through a normal pull request into `gh-pages`, then verify the live artifact and interactions. The original `2026/Draft/` content must remain byte-identical.
 
-Editorial pass: team assessments and Lab explanations were revised using Evan's prose guidance. Letter grades are editorial opinions, model scores are labeled relative, and dated injury reports are not translated into invented medical probabilities. The report identifies its analysis as AI-written.
+Editorial pass: team assessments and report explanations were revised using Evan's prose guidance. Letter grades are editorial opinions, model scores are labeled relative, and dated injury reports are not translated into invented medical probabilities. The report identifies its analysis as AI-written.
 
 ## Historical diminishing-returns lens (September 10 UTC update)
 
@@ -75,16 +73,10 @@ Replacement pools all eight teams' mandatory QB/2RB/2WR/TE slots, eight FLEX, an
 
 Ten-player preseason bands show raw mean total PPR points and positive replacement value, plus the observed range of season means (not a confidence interval). Each season has equal weight. Weighted pool-adjacent-violators provides a nonincreasing least-squares fit of the band means; linear interpolation between band centers supplies curve credits. The first band is flat before its center. Known ranks beyond 140 keep the last observed band value, avoiding a fabricated cutoff; unranked players receive zero credit. K/D/ST are excluded from this offensive model and remain displayed and assessed separately elsewhere.
 
-For 2026, a pick's curve surplus is `credit(ESPN rank) − credit(actual pick)`. Sum across offensive draft picks to measure acquisition quality. Bench assets count as acquired assets, not simultaneous starters. The primary index now uses percentiles weighted 60% starting points, 20% coverage, 10% ESPN auction surplus, and 10% curve surplus. The original 20% value budget is split between related signals rather than doubled. `withHistoricalScores` enriches the rows without changing the existing `summarize` contract; the exact previous index remains the `espn` preset. The `history` preset uses 60/20/0/20. The history panel's sample controls are sensitivity experiments and do not rewrite the fixed-reference published grades.
+For 2026, a pick's curve surplus is `credit(ESPN rank) − credit(actual pick)`. Sum across offensive draft picks to measure acquisition quality. Bench assets count as acquired assets, not simultaneous starters. The primary index now uses percentiles weighted 60% starting points, 20% coverage, 10% ESPN auction surplus, and 10% curve surplus. The original 20% value budget is split between related signals rather than doubled. `withHistoricalScores` enriches the rows without changing the existing `summarize` contract; the exact previous index remains the `espn` preset. The `history` preset uses 60/20/0/20. The published grades use the fixed ten-season two-QB reference.
 
 Findings: the eventual top 30/40 account for 79.4%/89.9% of positive value on average, while the preseason two-QB top 40 captures 58.8%. Preseason top-ten positive value averages 4.6 versus 2.3 at ranks 31–40; the top ten beat the next ten in seven of ten seasons. Observed reversals remain visible. Magic leads ten-year curve surplus (+6.2), narrowly ahead of Rome (+5.7); 2016–2020 favors Rome while 2021–2025 favors Magic. Rome remains first on the combined index. Think Tank moves above Clint from their previous index tie. All editorial letters remain unchanged. Each scorecard includes its curve-surplus statistic alongside the original assessment.
 
 Reimport using `node import-history.mjs /path/to/dedicated/cache`, then rebuild. Downloads are cached. An existing manifest rejects changed bytes or URLs; refreshing a source requires explicit review and updating its manifest. Normal builds are offline and use committed extracts. `data/value-analysis.json` contains both format calculations, per-season replacement lines, final value/position ranks, matched preseason picks, and curve bands.
 
-The value tests cover source coverage, zero seasons, historical positions, interpolation, weighted smoothing, independent pooled-slot optimization, concentration arithmetic, immutable old scoring behavior, all new weights, and reproducible exports. After the browser reports `data-value-ready=true`, also run:
-
-```sh
-agent-browser --session draft-value eval --stdin < tests/browser-value-audit.js
-```
-
-This checks all 52 combinations of ADP source, sample and lineup format; all 14 bands; both chart measures; four cutoffs; and every one of the 128 pick rows, including excluded specialists. Run all four browser audits at desktop and mobile widths, locally and after deployment.
+The value tests cover source coverage, zero seasons, historical positions, interpolation, weighted smoothing, independent pooled-slot optimization, concentration arithmetic, immutable old scoring behavior, all weights, and reproducible exports. The presentation tests pin both calculation hashes and the original knitr HTML, verify neutral ownership defaults and stable ties, check evidence-chart values, and ensure the report opens with collapsed scorecards and only the replay remains in the second tab.

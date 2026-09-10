@@ -1,52 +1,23 @@
-/* The report is intentionally short; the existing Lab retains its own layout. */
-.report-intro { padding: 38px 0 28px; border-bottom: 1px solid var(--ink); }
-.report-intro h1 { font-size: clamp(36px, 5vw, 58px); letter-spacing: -2px; line-height: 1.1; margin: 0 0 13px; }
-.report-intro > p { font-size: 13px; color: var(--muted); margin: 0 0 20px; }
-.report-jump { display: flex; flex-wrap: wrap; gap: 12px 25px; font-family: var(--label); font-size: 18px; }
+/* Report-specific hierarchy; Draft Lab keeps its established layout. */
+.report-intro { padding: 27px 0 22px; border-bottom: 1px solid var(--ink); }
+.report-intro h1 { font-size: clamp(33px, 4.5vw, 50px); letter-spacing: -1.7px; line-height: 1.1; margin: 0 0 10px; }
+.report-intro > p { font-size: 12px; color: var(--muted); margin: 0 0 13px; }
+.report-jump { display: flex; flex-wrap: wrap; gap: 10px 25px; font-family: var(--label); font-size: 17px; }
 .report-jump a { text-decoration: none; }
-#report .report-section { padding: 37px 0; }
+#report .report-section { padding: 30px 0; }
 #report .section-heading .data-label { font-family: var(--label); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--red); margin-bottom: 9px; }
 #report h2 { font-size: clamp(28px, 3.5vw, 37px); }
-.main-value-chart { max-width: 950px; margin: 22px auto; }
-.main-value-chart svg { min-width: 0; }
-.curve-compact { display: none; }
-.ownership-controls { display: flex; gap: 6px; flex-wrap: wrap; margin: 28px 0 8px; }
-.ownership-controls button { padding: 10px 12px; min-height: 44px; background: transparent; border: 1px solid var(--rule); color: var(--ink); font-family: var(--label); font-size: 16px; }
-.ownership-controls button[aria-pressed="true"] { background: var(--red); border-color: var(--red); color: var(--paper); }
-.ownership-controls button:hover:not([aria-pressed="true"]) { background: var(--light); }
-.ownership-help { font-size: 11px; color: var(--muted); margin-bottom: 23px; }
-.ownership-row { display: grid; grid-template-columns: 220px minmax(0,1fr); align-items: center; gap: 24px; border-top: 1px solid var(--rule); padding: 15px 0; }
-.ownership-row:last-child { border-bottom: 1px solid var(--rule); margin-bottom: 14px; }
-.ownership-row-label { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.ownership-row-label button { font-family: var(--label); font-size: 23px; white-space: nowrap; padding: 7px 0; min-height: 44px; border: 0; border-bottom: 2px solid transparent; background: transparent; color: var(--ink); }
-.ownership-row-label button[aria-pressed="true"] { border-bottom-color: var(--red); }
-.ownership-stat { display: flex; align-items: center; gap: 13px; text-align: right; font-variant-numeric: tabular-nums; }
-.ownership-stat b { font-family: var(--display); font-size: 32px; font-weight: 400; color: var(--red); line-height: 1; white-space: nowrap; }
-.ownership-stat b small { font-size: 17px; color: var(--muted); }
-.ownership-stat > span { font-family: var(--label); font-size: 18px; min-width: 48px; line-height: 1.2; }
-.ownership-stat > span small { font-family: var(--body); display: block; font-size: 9px; color: var(--muted); margin-top: 4px; }
-.ownership-bar { width: 100%; height: 49px; display: flex; overflow: hidden; }
-.ownership-segment { display: flex; justify-content: center; align-items: center; gap: 5px; overflow: hidden; background: #ddd8cd; border-right: 2px solid var(--paper); color: var(--ink); font-family: var(--label); font-size: 17px; line-height: 1; }
-.ownership-segment:nth-child(odd) { background: #cac8bc; }
-.ownership-segment.highlighted { background: var(--red); color: var(--paper); }
-.ownership-segment.undrafted { background: repeating-linear-gradient(135deg, var(--paper), var(--paper) 4px, var(--rule) 4px, var(--rule) 5px); }
-.segment-code { opacity: .75; font-size: 12px; }
-#ownership-players { border: 1px solid var(--rule); padding: 23px 25px; margin: 24px 0 18px; }
-#ownership-players h3 { margin: 0 0 20px; font-size: 26px; }
-#ownership-players h3 > span { display: inline-block; margin-left: 16px; font-family: var(--label); font-size: 16px; color: var(--muted); }
-.ownership-player-list { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 19px 20px; list-style: none; padding: 0; margin: 0; }
-.ownership-player-list li { display: flex; align-items: start; gap: 10px; font-size: 12px; line-height: 1.45; }
-.ownership-player-list b { font-family: var(--label); font-size: 19px; color: var(--red); font-weight: 500; }
-.ownership-player-list small { display: block; margin-top: 4px; font-size: 10px; color: var(--muted); }
-.ownership-table { min-width: 580px; }
-.ownership-table small { display: inline; margin-left: 8px; }
-.ownership-conclusion { margin: 24px 0 10px; max-width: 960px; font-size: 14px; }
-.visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
-.grade-basis { margin-top: 24px; }
-#report .team-report { max-width: 900px; margin: 0 auto; padding: 35px 0; }
-#report .team-heading h3 { font-size: 38px; }
-#report .team-heading .grade { font-size: 58px; }
-.scorecard-stats { display: flex; gap: 20px 42px; flex-wrap: wrap; margin: 20px 0 25px; padding-bottom: 17px; border-bottom: 1px solid var(--rule); }
+#report .team-report { max-width: 960px; margin: 0 auto; padding: 0; border-top: 0; border-bottom: 1px solid var(--rule); }
+.scorecard-list { border-top: 1px solid var(--ink); max-width: 960px; margin: 0 auto; }
+#report .team-heading { display: grid; grid-template-columns: 1fr 65px 15px; gap: 20px; align-items: center; min-height: 59px; margin: 0; padding: 9px 10px; list-style: none; }
+.team-heading::-webkit-details-marker { display: none; }
+.team-heading:hover { background: var(--light); }
+.team-name { font-family: var(--display); font-size: 25px; letter-spacing: -.6px; line-height: 1.2; }
+#report .team-heading .grade { font-size: 33px; text-align: center; }
+.scorecard-arrow { width: 8px; height: 8px; border-right: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); transform: rotate(45deg); margin-top: -4px; }
+.team-report[open] > summary .scorecard-arrow { transform: rotate(225deg); margin-top: 4px; }
+.scorecard-body { padding: 0 10px 24px; }
+.scorecard-stats { display: flex; gap: 20px 42px; flex-wrap: wrap; margin: 14px 0 25px; padding: 15px 0 17px; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
 .scorecard-stats dt { font-family: var(--label); font-size: 14px; color: var(--muted); }
 .scorecard-stats dd { margin: 3px 0 0; font-size: 17px; font-variant-numeric: tabular-nums; }
 #report .team-copy { font-size: 14px; max-width: 780px; }
@@ -57,38 +28,91 @@
 .roster-details summary { font-size: 17px; }
 .scorecard-details .lineup { min-width: 0; }
 .scorecard-details .table-scroll { margin-top: 0; }
+.grade-basis { margin-top: 22px; }
+.value-definition, .evidence-conclusion { max-width: 950px; margin: 20px auto; font-size: 13px; }
+.main-value-chart { max-width: 950px; margin: 22px auto; }
+.main-value-chart svg, .evidence-grid svg { min-width: 0; }
+.curve-compact { display: none; }
+.evidence-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; max-width: 1050px; margin: 30px auto 22px; }
+.evidence-grid figure { margin: 0; overflow: visible; min-width: 0; border-top: 1px solid var(--rule); padding-top: 20px; }
+.evidence-grid h3 { font-size: 23px; margin: 0 0 12px; min-height: 55px; }
+.evidence-grid .axis { font-size: 13px; }
+.ownership-controls { display: flex; gap: 8px; margin: 26px 0; flex-wrap: wrap; }
+.ownership-controls button, #ownership-clear { padding: 8px 20px; min-height: 44px; background: transparent; border: 1px solid var(--rule); color: var(--ink); font-family: var(--label); font-size: 18px; }
+.ownership-controls button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.ownership-controls button:hover:not([aria-pressed="true"]), #ownership-clear:hover { background: var(--light); }
+#ownership-bars h3 { font-size: 24px; margin: 0 0 18px; }
+.ownership-axis, .ownership-team { display: grid; grid-template-columns: 175px minmax(0,1fr) 115px; gap: 22px; align-items: center; }
+.ownership-axis { padding: 0 10px 7px; font-family: var(--label); font-size: 13px; color: var(--muted); }
+.ownership-axis > div { display: flex; justify-content: space-between; }
+.ownership-axis > span:last-child { text-align: right; }
+.ownership-team { width: 100%; min-height: 50px; border: 0; border-top: 1px solid var(--rule); background: transparent; padding: 10px; color: var(--ink); text-align: left; }
+.ownership-team:last-child { border-bottom: 1px solid var(--rule); }
+.ownership-team:hover { background: var(--light); }
+.ownership-team[aria-pressed="true"] { box-shadow: inset 3px 0 var(--ink); }
+.ownership-team[aria-pressed="true"] .ownership-name { text-decoration: underline; text-underline-offset: 4px; }
+.ownership-team:disabled { opacity: 1; }
+.ownership-name { font-family: var(--label); font-size: 20px; line-height: 1.2; }
+.ownership-track { height: 22px; background: repeating-linear-gradient(to right, var(--rule) 0, var(--rule) 1px, transparent 1px, transparent 33.33333%); display: block; }
+.ownership-fill { height: 100%; background: var(--green); display: block; }
+.ownership-stat { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-variant-numeric: tabular-nums; }
+.ownership-stat b { font-family: var(--label); font-size: 21px; font-weight: 500; white-space: nowrap; }
+.ownership-stat b small { font-size: 13px; color: var(--muted); }
+.ownership-stat > span { font-size: 12px; color: var(--muted); }
+#ownership-players { border: 1px solid var(--rule); padding: 23px 25px; margin: 24px 0 12px; }
+#ownership-players h3 { margin: 0 0 20px; font-size: 26px; }
+#ownership-players h3 > span { display: inline-block; margin-left: 16px; font-family: var(--label); font-size: 16px; color: var(--muted); }
+.ownership-empty { margin: 0; font-size: 13px; color: var(--muted); }
+.ownership-player-list { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 19px 20px; list-style: none; padding: 0; margin: 0; }
+.ownership-player-list li { display: flex; align-items: start; gap: 10px; font-size: 12px; line-height: 1.45; }
+.ownership-player-list b { font-family: var(--label); font-size: 19px; color: var(--ink); font-weight: 500; }
+.ownership-player-list small { display: block; margin-top: 4px; font-size: 10px; color: var(--muted); }
+#ownership-clear { font-size: 15px; margin-bottom: 20px; }
+.ownership-table { min-width: 580px; }
+.ownership-table small { display: inline; margin-left: 8px; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
 .report-method { margin: 25px 0; }
 .report-method > summary { font-size: 21px; }
 .report-method h3 { font-size: 23px; margin: 25px 0 15px; }
 .report-method > p { font-size: 12px; max-width: 1000px; }
+#replay > .section-heading { display: block; }
+.replay-source { margin-top: 25px; }
 @media (max-width: 800px) {
-  .ownership-row { grid-template-columns: 1fr; gap: 8px; }
-  .ownership-row-label { justify-content: start; }
-  .ownership-stat { margin-left: auto; }
   .ownership-player-list { grid-template-columns: repeat(2, minmax(0,1fr)); }
   .scorecard-details { grid-template-columns: 1fr; gap: 10px; }
+  .evidence-grid { grid-template-columns: 1fr; gap: 28px; max-width: 580px; }
+  .evidence-grid h3 { min-height: 0; }
+  .ownership-axis, .ownership-team { grid-template-columns: 132px minmax(0,1fr) 95px; gap: 13px; }
+  .ownership-name { font-size: 18px; }
 }
 @media (max-width: 480px) {
-  .report-intro { padding: 29px 0 22px; }
-  .report-intro h1 { letter-spacing: -1.3px; }
-  .report-jump { gap: 10px 19px; font-size: 16px; }
+  .report-intro { padding: 22px 0 18px; }
+  .report-intro h1 { letter-spacing: -1px; }
+  .report-jump { gap: 7px 17px; font-size: 15px; }
+  #report .team-heading { min-height: 49px; grid-template-columns: 1fr 44px 10px; gap: 12px; padding: 6px 4px; }
+  .team-name { font-size: 23px; }
+  #report .team-heading .grade { font-size: 29px; }
+  .scorecard-body { padding-left: 4px; padding-right: 4px; }
   .curve-wide { display: none; }
   .curve-compact { display: block; }
   .curve-compact .axis { font-size: 14px; }
   .main-value-chart { margin: 18px 0; }
-  .ownership-controls button { flex: 1 1 44%; font-size: 15px; }
-  .ownership-row { padding: 10px 0 15px; }
-  .ownership-bar { height: 38px; }
-  .segment-code { display: none; }
-  .ownership-segment { font-size: 15px; }
+  .ownership-controls { gap: 6px; }
+  .ownership-controls button { flex: 1; padding: 8px 9px; font-size: 17px; }
+  .ownership-axis, .ownership-team { grid-template-columns: 104px minmax(0,1fr) 68px; gap: 9px; padding-left: 0; padding-right: 0; }
+  .ownership-name { font-size: 16px; }
+  .ownership-axis { font-size: 10px; }
+  .ownership-track { height: 18px; }
+  .ownership-stat { gap: 2px; flex-direction: column; align-items: end; line-height: 1.15; }
+  .ownership-stat b { font-size: 18px; }
+  .ownership-stat b small { font-size: 11px; }
+  .ownership-stat > span { font-size: 10px; }
   #ownership-players { padding: 20px 15px; }
   #ownership-players h3 { font-size: 25px; }
   #ownership-players h3 > span { display: block; margin: 7px 0 0; }
   .ownership-player-list { gap: 16px 10px; }
   .ownership-player-list li { font-size: 11px; gap: 6px; }
-  #report .team-heading h3 { font-size: 31px; }
-  #report .team-heading .grade { font-size: 48px; }
   .scorecard-stats { gap: 13px; justify-content: space-between; }
   .scorecard-stats dt { font-size: 12px; }
 }
-@media print { .ownership-controls,.ownership-help { display: none; } .curve-wide { display: block; } .curve-compact { display: none; } }
+@media print { .ownership-controls,#ownership-clear { display: none; } .curve-wide { display: block; } .curve-compact { display: none; } }

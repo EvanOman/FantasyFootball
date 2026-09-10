@@ -14,13 +14,15 @@ export function rankOwnership(players, teams) {
   });
 }
 
-export function ownershipView(cohorts, team, top = 30) {
-  if (!CUTOFFS.includes(top) || !cohorts.every(c => c.rows.some(r => r.team === team))) throw Error('Invalid ownership selection');
-  return { team, top, cohorts:cohorts.map(c => {
-    const row = c.rows.find(r => r.team === team);
-    const place = 1 + c.rows.filter(r => r.count > row.count).length;
-    const tied = c.rows.filter(r => r.count === row.count).length > 1;
-    return { ...c, selected:row, place, tied,
-      ordered:[row, ...c.rows.filter(r => r.team !== team)] };
-  }), players:cohorts.find(c => c.top === top).rows.find(r => r.team === team).players };
+export function ownershipView(cohorts, team = null, top = 30) {
+  const cohort = cohorts.find(c => c.top === top);
+  if (!cohort || (team !== null && !cohort.rows.some(r => r.team === team))) throw Error('Invalid ownership selection');
+  const rows = cohort.rows.map(row => ({ ...row,
+    place:1 + cohort.rows.filter(r => r.count > row.count).length,
+    tied:cohort.rows.filter(r => r.count === row.count).length > 1
+  })).sort((a,b) => b.count - a.count);
+  // A shared zero-based scale across cutoffs; ties retain draft-column order.
+  const maximum = Math.max(30, ...cohorts.flatMap(c => c.rows.map(r => Math.ceil(r.share / 10) * 10)));
+  return { team, top, rows, maximum, undrafted:cohort.undrafted,
+    players:team === null ? [] : rows.find(r => r.team === team).players };
 }
