@@ -100,12 +100,12 @@
         change('#bye-week',10);
       }
     }
-    for(const preset of ['balanced','starters','depth','value']) {
+    for(const preset of Object.keys(data.weights)) {
       change('#grade-preset',preset);
       const rows=[...document.querySelectorAll('#grade-comparison tbody tr')];
       equal(rows.length,8,'Eight grade rows');
       const ordered=[...data.formats[format]].sort((a,b)=>b.scores[preset]-a.scores[preset]||a.team.localeCompare(b.team));
-      rows.forEach((tr,i)=>{assert(tr.cells[0].textContent.includes(ordered[i].team),'Grade order');assert(tr.cells[1].textContent.includes(n(ordered[i].scores[preset])),'Grade score');});
+      rows.forEach((tr,i)=>{assert(tr.cells[0].textContent.includes(ordered[i].team),'Grade order');assert(tr.cells[1].textContent.includes(n(ordered[i].scores[preset])),'Grade score');assert(tr.cells[5].textContent.includes(n(ordered[i].curve.surplus)),'Historical curve score');});
     }
   }
   click('#matchup-reset');change('#grade-preset','balanced');

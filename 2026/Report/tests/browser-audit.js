@@ -21,7 +21,7 @@
     if (!score) throw new Error(`Missing scoreboard row: ${team.team}`);
     const surplus = `${team.valueSurplus > 0 ? '+' : ''}${team.valueSurplus}`;
     equal(cells(score), [team.team, team.grade, number(team.baseline.perGame),
-      `${number(team.retention)}%`, surplus, number(team.scores.balanced)], `${team.team} scores`);
+      `${number(team.retention)}%`, surplus, `${team.curve.surplus > 0 ? '+' : ''}${number(team.curve.surplus)}`, number(team.scores.balanced)], `${team.team} scores`);
     const section = document.getElementById(`team-${slug(team.team)}`);
     if (!section) throw new Error(`Missing article: ${team.team}`);
     equal(section.querySelector('.grade').textContent, team.grade, `${team.team} article grade`);
@@ -43,7 +43,7 @@
     if (!document.getElementById(anchor.hash.slice(1))) throw new Error(`Broken anchor: ${anchor.hash}`);
   }
   const charts = [...document.querySelectorAll('#report svg[role="img"]')];
-  equal(charts.length, 3, 'Report chart count');
+  equal(charts.length, 4, 'Report chart count');
   for (const chart of charts) {
     const title = document.getElementById(chart.getAttribute('aria-labelledby'));
     if (!title?.textContent.trim()) throw new Error('Chart is missing an accessible title');

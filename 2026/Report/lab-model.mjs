@@ -61,5 +61,5 @@ export function gradeView(data, format = 'standard', preset = 'balanced') {
   return [...rows].sort((a, b) => b.scores[preset] - a.scores[preset] || a.team.localeCompare(b.team))
     .map(row => ({ team: row.team, grade: row.grade, score: row.scores[preset], place: row.places[preset],
       rankDiff: row.rankDiff, oldPlace: 1 + rows.filter(other => other.rankDiff < row.rankDiff).length,
-      valueSurplus: row.valueSurplus, starterSalary: row.starterSalary }));
+      valueSurplus: row.valueSurplus, starterSalary: row.starterSalary, curveSurplus:row.curve?.surplus ?? null }));
 }

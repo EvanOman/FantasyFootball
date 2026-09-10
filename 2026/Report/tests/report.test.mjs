@@ -49,7 +49,8 @@ test('Every replay state is cumulative, and every scenario retains legal slot co
 test('Rank placeholders, absent projections, and uncertainty are disclosed', () => {
   for (const text of ['not a win probability or an ESPN grade', 'not a zero-points projection',
     'not a matchup forecast', 'not a prediction', 'no independent league export', '301',
-    '60%', '20%', '80/10/10', '40/40/20', '35/15/50', 'six from 60-plus']) assert(html.includes(text), text);
+    '60%', '20%', '80/10/5/5', '40/40/10/10', '35/15/25/25', '60/20/20/0', 'six from 60-plus',
+    'not an archived eight-team ESPN PPR superflex ranking', 'not a fresh projection', '2016–2025']) assert(html.includes(text), text);
   assert.equal(result.players.filter(p => ['K', 'DST'].includes(p.position) && p.points === null).length, 16);
 });
 test('Every exported lineup total reconciles to its actual selected player IDs', () => {
