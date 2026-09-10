@@ -1,6 +1,6 @@
 # 2026 draft grades and Draft Lab
 
-Purpose: help the eight managers understand why their grades differ when we compare draft prices, legal starting lineups, and the bench's ability to cover absences.
+Purpose: show the historical drop in value by draft rank, compare each manager's share of highly ranked players, and explain the eight team grades.
 
 This is a separate report. `../Draft/` remains the original knitr page and must not change.
 
@@ -23,7 +23,9 @@ The matchup desk compares any two legal lineups, including specialists, and show
 
 The Elo-style power scale is `1500 + 400 * log10(P / G)`, where `P` is a legal lineup's published point total and `G` is the baseline cohort's geometric mean. The reference stays fixed within a format when scenarios change. It is a transparent display transform, not an outcome-trained Elo model. Its logistic share is exactly `P1 / (P1 + P2)`, **not a fantasy win probability**. No weekly variance, injury probabilities, correlations, or new player forecasts are invented. The US Chess standard expectancy formula is linked as mathematical background, not an endorsement of this fantasy application.
 
-Presentation direction: a sports annual with cream paper, dark ink, red editorial accents, large serif headlines, and compact data graphics. No frontend framework or package install is needed. A standalone tested analysis module owns the calculations; browser event handlers only select inputs and render results. Static hosting on the existing GitHub Pages site is retained.
+Presentation direction: cream paper, dark ink, red accents, plain section titles, and compact data graphics. The report runs from the historical value curve to cumulative top-player shares, then the team scorecards. Full lineups, availability notes, the score comparison, and calculation details are collapsed. Draft Lab remains a separate tab. No frontend framework or package install is needed. Tested analysis modules own the calculations; browser event handlers only select inputs and render results. Static hosting on the existing GitHub Pages site is retained.
+
+The ownership chart uses the frozen ESPN ranking to show each team's share of the top 10, 20, 30, and 40. The denominator is the full cutoff, not just drafted players, and the groups are cumulative. Magic's counts are 2/5/8/8: shared leads at 10 and 40, outright leads at 20 and 30. Highlighting another team changes the bars and player list, not the published takeaways or scores. The report-flow rewrite preserves both numerical exports byte-for-byte.
 
 ## Source import
 
@@ -47,10 +49,11 @@ The exported-scenario tests independently sum the selected players, check roster
 
 ```sh
 agent-browser --session draft-grades eval --stdin < tests/browser-audit.js
+agent-browser --session draft-grades eval --stdin < tests/browser-ownership-audit.js
 agent-browser --session draft-grades eval --stdin < tests/browser-lab-audit.js
 ```
 
-The report audit compares all eight scoreboard rows and all 80 displayed lineup rows to the export. The Lab audit exercises every control, all 129 scrub states, and 216 displayed lineups across formats and scenarios, including every bye week. It checks keyboard tab focus, source navigation, resets, and page overflow. Browser interactions supplement the independent exhaustive optimizer and power-scale model tests; a screenshot alone does not establish arithmetic correctness.
+The report audit compares all eight scoreboard rows and all 80 roster-lineup rows to the export. The ownership audit checks all 32 team/cutoff combinations, counts, percentages, rendered segment widths, ties, player identities, retained keyboard focus, and all eight expandable rosters. It also checks that one responsive curve is visible and that links open collapsed source details. The Lab audit exercises every control, all 129 scrub states, and 216 displayed lineups across formats and scenarios, including every bye week. It checks keyboard tab focus, source navigation, resets, and page overflow. Browser interactions supplement the independent exhaustive optimizer and power-scale model tests; a screenshot alone does not establish arithmetic correctness.
 
 Deployment target: `https://evanoman.github.io/FantasyFootball/2026/Report/`. Publish through a normal pull request into `gh-pages`, then verify the live artifact and interactions. The original `2026/Draft/` content must remain byte-identical.
 
@@ -74,7 +77,7 @@ Ten-player preseason bands show raw mean total PPR points and positive replaceme
 
 For 2026, a pick's curve surplus is `credit(ESPN rank) − credit(actual pick)`. Sum across offensive draft picks to measure acquisition quality. Bench assets count as acquired assets, not simultaneous starters. The primary index now uses percentiles weighted 60% starting points, 20% coverage, 10% ESPN auction surplus, and 10% curve surplus. The original 20% value budget is split between related signals rather than doubled. `withHistoricalScores` enriches the rows without changing the existing `summarize` contract; the exact previous index remains the `espn` preset. The `history` preset uses 60/20/0/20. The history panel's sample controls are sensitivity experiments and do not rewrite the fixed-reference published grades.
 
-Findings: the eventual top 30/40 account for 79.4%/89.9% of positive value on average, while the preseason two-QB top 40 captures 58.8%. Preseason top-ten positive value averages 4.6 versus 2.3 at ranks 31–40; the top ten beat the next ten in seven of ten seasons. Observed reversals remain visible. Magic leads ten-year curve surplus (+6.2), narrowly ahead of Rome (+5.7); 2016–2020 favors Rome while 2021–2025 favors Magic. Rome remains first on the combined index. Think Tank moves above Clint from their previous index tie. All editorial letters remain unchanged, with a historical-value paragraph added to every assessment.
+Findings: the eventual top 30/40 account for 79.4%/89.9% of positive value on average, while the preseason two-QB top 40 captures 58.8%. Preseason top-ten positive value averages 4.6 versus 2.3 at ranks 31–40; the top ten beat the next ten in seven of ten seasons. Observed reversals remain visible. Magic leads ten-year curve surplus (+6.2), narrowly ahead of Rome (+5.7); 2016–2020 favors Rome while 2021–2025 favors Magic. Rome remains first on the combined index. Think Tank moves above Clint from their previous index tie. All editorial letters remain unchanged. Each scorecard includes its curve-surplus statistic alongside the original assessment.
 
 Reimport using `node import-history.mjs /path/to/dedicated/cache`, then rebuild. Downloads are cached. An existing manifest rejects changed bytes or URLs; refreshing a source requires explicit review and updating its manifest. Normal builds are offline and use committed extracts. `data/value-analysis.json` contains both format calculations, per-season replacement lines, final value/position ranks, matched preseason picks, and curve bands.
 
@@ -84,4 +87,4 @@ The value tests cover source coverage, zero seasons, historical positions, inter
 agent-browser --session draft-value eval --stdin < tests/browser-value-audit.js
 ```
 
-This checks all 52 combinations of ADP source, sample and lineup format; all 14 bands; both chart measures; four cutoffs; and every one of the 128 pick rows, including excluded specialists. Run all three browser audits at desktop and mobile widths, locally and after deployment.
+This checks all 52 combinations of ADP source, sample and lineup format; all 14 bands; both chart measures; four cutoffs; and every one of the 128 pick rows, including excluded specialists. Run all four browser audits at desktop and mobile widths, locally and after deployment.

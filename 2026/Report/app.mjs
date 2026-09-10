@@ -1,5 +1,6 @@
 import { matchupRows, headToHead, replayView, gradeView } from './lab-model.mjs';
 import { startValueLab } from './value-app.mjs';
+import { startOwnership } from './ownership-app.mjs';
 
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -24,6 +25,7 @@ function showTab() {
   }
   if (!lab) stopPlayback();
   const target = document.getElementById(id);
+  for (let detail = target?.closest('details'); detail; detail = detail.parentElement?.closest('details')) detail.open = true;
   if (target && location.hash) requestAnimationFrame(() => target.scrollIntoView({behavior:'instant',block:'start'}));
 }
 for (const name of ['report','lab']) $(`#tab-${name}`).addEventListener('click', () => {
@@ -47,6 +49,7 @@ async function startLab() {
   const response = await fetch('data/analysis.json');
   if (!response.ok) throw Error(`Draft data could not be loaded (HTTP ${response.status}).`);
   const data = await response.json();
+  startOwnership(data);
   const players = new Map([...data.players, ...Object.values(data.wire).flat()].map(p => [p.id,p]));
   const state = { pick:128, team:'Rome Reigns', position:'all', a:'Rome Reigns', b:'Magic Skol Bus',
     format:'standard', scenario:'baseline', week:10, exclusions:{}, waivers:false, preset:'balanced' };

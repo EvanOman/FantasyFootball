@@ -43,7 +43,7 @@
     if (!document.getElementById(anchor.hash.slice(1))) throw new Error(`Broken anchor: ${anchor.hash}`);
   }
   const charts = [...document.querySelectorAll('#report svg[role="img"]')];
-  equal(charts.length, 4, 'Report chart count');
+  equal(charts.length, 2, 'Desktop and mobile renderings of the single value curve');
   for (const chart of charts) {
     const title = document.getElementById(chart.getAttribute('aria-labelledby'));
     if (!title?.textContent.trim()) throw new Error('Chart is missing an accessible title');
