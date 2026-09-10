@@ -5,29 +5,28 @@ export function startOwnership(data) {
   const section = document.querySelector('#rank-shares');
   if (!section) return;
   const cohorts = rankOwnership(data.players, data.teams);
-  let team = 'Magic Skol Bus', top = 30;
-  function render() {
+  let team = null, top = 30;
+  function render(changeCutoff) {
     const view = ownershipView(cohorts, team, top);
-    // Preserve the cutoff buttons (and keyboard focus) during updates.
-    const template = document.createElement('template');
-    template.innerHTML = ownershipBars(view);
-    for (const row of section.querySelectorAll('[data-cohort]')) {
-      const next = template.content.querySelector(`[data-cohort="${row.dataset.cohort}"]`);
-      row.querySelector('.ownership-stat').innerHTML = next.querySelector('.ownership-stat').innerHTML;
-      row.querySelector('.ownership-bar').replaceWith(next.querySelector('.ownership-bar'));
-      const button = row.querySelector('[data-share-cutoff]'), source = next.querySelector('[data-share-cutoff]');
-      for (const name of ['aria-label','aria-pressed']) button.setAttribute(name, source.getAttribute(name));
-    }
+    // Cutoff controls stay in place; selecting a team also preserves its button.
+    if (changeCutoff) section.querySelector('#ownership-bars').innerHTML = ownershipBars(view);
     for (const button of section.querySelectorAll('[data-share-team]')) button.setAttribute('aria-pressed', String(button.dataset.shareTeam === team));
+    for (const button of section.querySelectorAll('[data-share-cutoff]')) button.setAttribute('aria-pressed', String(Number(button.dataset.shareCutoff) === top));
     section.querySelector('#ownership-players').innerHTML = ownershipPlayers(view);
-    section.querySelector('#ownership-status').textContent = `${team}: ${view.cohorts.map(c => `${c.selected.count} of the top ${c.top}`).join(', ')}.`;
+    section.querySelector('#ownership-clear').hidden = team === null;
+    section.querySelector('#ownership-status').textContent = team === null
+      ? `Comparing all teams’ shares of the top ${top}. No team selected.`
+      : `${team}: ${view.players.length} of the top ${top}. Player list updated.`;
   }
   section.addEventListener('click', event => {
     const teamButton = event.target.closest('[data-share-team]'), cutoffButton = event.target.closest('[data-share-cutoff]');
     if (teamButton) team = teamButton.dataset.shareTeam;
     else if (cutoffButton) top = Number(cutoffButton.dataset.shareCutoff);
-    else return;
-    render();
+    else if (event.target.closest('#ownership-clear')) {
+      team = null;
+      section.querySelector(`[data-share-cutoff="${top}"]`).focus();
+    } else return;
+    render(Boolean(cutoffButton));
   });
   for (const button of section.querySelectorAll('button')) button.disabled = false;
   document.documentElement.dataset.ownershipReady = 'true';

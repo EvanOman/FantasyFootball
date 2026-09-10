@@ -146,7 +146,7 @@ test('History export is reproducible and the written conclusions match its arith
   const html = readFileSync(new URL('../index.html',import.meta.url),'utf8');
   assert.equal((html.match(/class="scorecard-curve"/g)??[]).length,8);
   assert(!html.includes('class="curve-assessment"'));
-  assert(html.includes('All eight letter grades are unchanged'));
+  assert.equal((html.match(/<span class="grade" aria-label="Grade /g)??[]).length,8);
   const draft=read('draft'), players=joinPlayers(draft,read('projections'));
   for (const [years,winner] of [[[2016,2017,2018,2019,2020],'Rome Reigns'],[[2021,2022,2023,2024,2025],'Magic Skol Bus']]) {
     const curve=historicalCurve(history,{years});
